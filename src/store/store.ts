@@ -1,5 +1,4 @@
 // Module imports
-import { createQuicksliceClient } from 'quickslice-client-js'
 import { makeStore } from 'statery'
 
 // Local imports

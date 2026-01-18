@@ -3,6 +3,7 @@ import { type Client } from 'graphql-ws'
 
 // Local imports
 import { type Game } from '@/typedefs/Game'
+import { wait } from '@/helpers/wait'
 import { store } from '@/store/store'
 
 export async function subscribeToUpdates(client: Client) {
@@ -28,6 +29,8 @@ export async function subscribeToUpdates(client: Client) {
 			continue
 		}
 
+		await wait(1000)
+
 		store.set((previousState) => {
 			const updatedGame = event.data
 				?.gamesGamesgamesgamesgamesGameUpdated as Game
@@ -38,7 +41,11 @@ export async function subscribeToUpdates(client: Client) {
 
 			const index = newCatalog.findIndex((game) => game.uri === updatedGame.uri)
 
-			newCatalog[index] = updatedGame
+			if (index !== -1) {
+				newCatalog[index] = updatedGame
+			} else {
+				newCatalog.push(updatedGame)
+			}
 
 			return { gamesCatalog: newCatalog }
 		})
