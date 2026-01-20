@@ -23,14 +23,18 @@ export async function listGames() {
 		`
 		query ListGames ($cursor: String) {
 			gamesGamesgamesgamesgamesGame(
-				first: 20
+				first: 25
 				after: $cursor
 				sortBy: [{ field: name, direction: DESC }]
 			) {
 				edges {
 					node {
 						uri
+						did
 						name
+						summary
+						type
+						modes
 					}
 				}
 				pageInfo {

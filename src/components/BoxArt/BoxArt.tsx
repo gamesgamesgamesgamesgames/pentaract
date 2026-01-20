@@ -7,6 +7,8 @@ import { motion } from 'motion/react'
 // Local imports
 import { Game } from '@/typedefs/Game'
 import { Link } from '@/components/Link/Link'
+import { parseATURI } from '@/helpers/parseATURI'
+import { useMemo } from 'react'
 
 // Types
 type Props = {
@@ -17,6 +19,59 @@ type Props = {
 export function BoxArt(props: Props) {
 	const { game, width = 'auto' } = props
 
+	const { did, rkey } = useMemo(() => {
+		if (game) {
+			return parseATURI(game.record.uri)
+		}
+
+		return {
+			did: null,
+			collection: null,
+			rkey: null,
+		}
+	}, [game])
+
+	const internalElements = useMemo(() => {
+		let result = (
+			<>
+				<Inset
+					clip={'padding-box'}
+					side={'top'}>
+					<Skeleton loading={!game}>
+						<AspectRatio ratio={3 / 4}>
+							<img
+								src={'https://placehold.co/300x400'}
+								style={{
+									height: '100%',
+									objectFit: 'cover',
+									width: '100%',
+								}}
+							/>
+						</AspectRatio>
+					</Skeleton>
+				</Inset>
+
+				<Box pt={'3'}>
+					<Skeleton loading={!game}>
+						<Text>{game?.record.name ?? 'Game name'}</Text>
+					</Skeleton>
+				</Box>
+			</>
+		)
+
+		if (game && did && rkey) {
+			result = (
+				<Link
+					href={`/dashboard/catalog/${did}/${rkey}/overview`}
+					underline={'none'}>
+					{result}
+				</Link>
+			)
+		}
+
+		return result
+	}, [game])
+
 	return (
 		<Card asChild>
 			<motion.div
@@ -26,32 +81,7 @@ export function BoxArt(props: Props) {
 					willChange: 'scale',
 				}}
 				whileHover={{ scale: 1.05 }}>
-				<Link
-					href={'/'}
-					underline={'none'}>
-					<Inset
-						clip={'padding-box'}
-						side={'top'}>
-						<Skeleton loading={!game}>
-							<AspectRatio ratio={3 / 4}>
-								<img
-									src={'https://placehold.co/300x400'}
-									style={{
-										height: '100%',
-										objectFit: 'cover',
-										width: '100%',
-									}}
-								/>
-							</AspectRatio>
-						</Skeleton>
-					</Inset>
-
-					<Box pt={'3'}>
-						<Skeleton loading={!game}>
-							<Text>{game?.record.name ?? 'Game name'}</Text>
-						</Skeleton>
-					</Box>
-				</Link>
+				{internalElements}
 			</motion.div>
 		</Card>
 	)
