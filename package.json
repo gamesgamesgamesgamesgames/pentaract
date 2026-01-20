@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build-lexicons": "lex build --out ./src/lexicons",
     "start": "next start",
     "lint": "eslint"
   },

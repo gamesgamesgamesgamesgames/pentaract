@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# lexicons
+/src/lexicons
+
 # testing
 /coverage
 
