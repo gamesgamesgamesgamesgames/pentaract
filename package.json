@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build-lexicons": "lex build --out ./src/lexicons",
+    "build-lexicons": "lex build --lexicons ./src/lexicons --out ./src/helpers/lexicons --clear",
     "start": "next start",
     "lint": "eslint"
   },

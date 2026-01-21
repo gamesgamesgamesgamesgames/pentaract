@@ -11,7 +11,7 @@
 !.yarn/versions
 
 # lexicons
-/src/lexicons
+/src/helpers/lexicons
 
 # testing
 /coverage
