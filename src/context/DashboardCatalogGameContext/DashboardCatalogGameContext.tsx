@@ -1,4 +1,5 @@
 // Moduile imports
+import { type AtUriString } from '@atproto/lex'
 import {
 	createContext,
 	useCallback,
@@ -11,7 +12,6 @@ import {
 import { useStore } from 'statery'
 
 // Local imports
-import { type ATURI } from '@/typedefs/ATURI'
 import { type DID } from '@/typedefs/DID'
 import { type Game } from '@/typedefs/Game'
 import { getGame } from '@/store/actions/getGame'
@@ -40,7 +40,7 @@ export function DashboardCatalogGameContextProvider(props: Props) {
 
 	const did = decodeURIComponent(params.did)
 	const rkey = decodeURIComponent(params.rkey)
-	const gameURI: ATURI = `at://${did}/games.gamesgamesgamesgames.game/${rkey}`
+	const gameURI: AtUriString = `at://${did}/games.gamesgamesgamesgames.game/${rkey}`
 
 	const { gamesCatalog, user } = useStore(store)
 

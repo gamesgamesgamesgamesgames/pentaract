@@ -1,7 +1,7 @@
-// Local imports
-import { ATURI } from '@/typedefs/ATURI'
+// Module imports
+import { type AtUriString } from '@atproto/lex'
 
-export function parseATURI(uri: ATURI) {
+export function parseATURI(uri: AtUriString) {
 	const parts = uri.replace(/^at:\/\//, '').split('/')
 
 	return {

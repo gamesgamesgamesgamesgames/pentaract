@@ -1,14 +1,14 @@
 // Module imports
+import { type AtUriString } from '@atproto/lex'
 import { type Client } from 'graphql-ws'
 
 // Local imports
-import { type ATURI } from '@/typedefs/ATURI'
 import { type GameRecord } from '@/typedefs/GameRecord'
 import { store } from '@/store/store'
 
 export async function subscribeToDeletes(client: Client) {
 	const subscription = client.iterate<{
-		gamesGamesgamesgamesgamesGameUpdated: { uri: ATURI }
+		gamesGamesgamesgamesgamesGameUpdated: { uri: AtUriString }
 	}>({
 		query: `
 			subscription {

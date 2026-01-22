@@ -1,12 +1,10 @@
-// Local imports
-import { type ATURI } from '@/typedefs/ATURI'
-import { type DID } from '@/typedefs/DID'
+// Module imports
+import { type AtUriString } from '@atproto/lex'
 
-export interface GameRecord {
-	did: DID
-	uri: ATURI
+// Local imports
+import type * as GameLexicon from '@/helpers/lexicons/games/gamesgamesgamesgames/game'
+
+export type GameRecord = GameLexicon.Main & {
+	uri: AtUriString
 	name: string
-	summary?: string
-	type?: string
-	modes?: string[]
 }
