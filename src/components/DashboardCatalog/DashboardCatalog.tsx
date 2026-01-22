@@ -7,7 +7,6 @@ import { useStore } from 'statery'
 
 // Local imports
 import { BoxArt } from '@/components/BoxArt/BoxArt'
-import { DashboardMainWrapper } from '@/components/DashboardMainWrapper/DashboardMainWrapper'
 import { listGames } from '@/store/actions/listGames'
 import { NewGameDialog } from '@/components/NewGameDialog/NewGameDialog'
 import { type State } from '@/typedefs/State'
@@ -71,7 +70,7 @@ export function DashboardCatalog() {
 	}, [gamesCatalog, loadGames, state])
 
 	return (
-		<DashboardMainWrapper>
+		<>
 			<Flex justify={'between'}>
 				<Heading as={'h2'}>{'Games'}</Heading>
 
@@ -100,6 +99,6 @@ export function DashboardCatalog() {
 					</Box>
 				)}
 			</Flex>
-		</DashboardMainWrapper>
+		</>
 	)
 }

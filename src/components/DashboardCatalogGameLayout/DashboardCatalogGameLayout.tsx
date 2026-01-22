@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 
 // Local imports
-import { DashboardMainWrapper } from '@/components/DashboardMainWrapper/DashboardMainWrapper'
 import {
 	DashboardCatalogGameContextProvider,
 	useDashboardCatalogGameContext,
@@ -36,7 +35,7 @@ export function DashboardCatalogGameLayout(props: Props) {
 	const { game } = useDashboardCatalogGameContext()
 
 	return (
-		<DashboardMainWrapper>
+		<>
 			{game !== null && (
 				<>
 					<Flex
@@ -81,6 +80,6 @@ export function DashboardCatalogGameLayout(props: Props) {
 					{'Loading...'}
 				</Flex>
 			)}
-		</DashboardMainWrapper>
+		</>
 	)
 }
