@@ -50,7 +50,7 @@ export function TypesField(props: Props) {
 					<FormLabel>{'Type'}</FormLabel>
 					<Form.Control asChild>
 						<Select.Root
-							defaultValue={'game'}
+							defaultValue={'games.gamesgamesgamesgames.applicationType#game'}
 							disabled={disabled}>
 							<Select.Trigger />
 							<Select.Content>{options}</Select.Content>
