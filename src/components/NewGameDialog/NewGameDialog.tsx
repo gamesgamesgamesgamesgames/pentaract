@@ -1,21 +1,18 @@
 // Module imports
-import {
-	Box,
-	Button,
-	Dialog,
-	Flex,
-	TextArea,
-	TextField,
-} from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { Form } from 'radix-ui'
 import { type ReactNode, useCallback, useState } from 'react'
 
 // Local imports
-import { FormLabel } from '@/components/FormLabel/FormLabel'
-import { GameModesDropdown } from '@/components/NewGameDialog/GameModesDropdown'
-import { GameTypesDropdown } from '@/components/NewGameDialog/GameTypesDropdown'
-import { type State } from '@/typedefs/State'
+import { GenresField } from '@/components/NewGameDialog/GameGenresField'
+import { ModesField } from '@/components/NewGameDialog/GameModesField'
+import { PlayerPerspectivesField } from '@/components/NewGameDialog/GamePlayerPerspectivesField'
+import { ThemesField } from '@/components/NewGameDialog/GameThemesField'
+import { TypesField } from '@/components/NewGameDialog/GameTypesField'
+import { NameField } from '@/components/NewGameDialog/NameField'
 import { putGame } from '@/store/actions/putGame'
+import { type State } from '@/typedefs/State'
+import { SummaryField } from '@/components/NewGameDialog/SummaryField'
 
 // Types
 type Props = Readonly<{ trigger: ReactNode }>
@@ -51,52 +48,23 @@ export function NewGameDialog(props: Props) {
 					asChild>
 					<form>
 						<Flex direction={'column'}>
-							<Form.Field
-								asChild
-								name={'name'}>
-								<Flex
-									asChild
-									direction={'column'}>
-									<Box mb={'5'}>
-										<FormLabel>{'Name'}</FormLabel>
-										<Form.Message match={'valueMissing'}>
-											{'Name is required'}
-										</Form.Message>
-										<Form.Control asChild>
-											<TextField.Root
-												autoComplete={'off'}
-												disabled={state === 'active'}
-												required
-											/>
-										</Form.Control>
-									</Box>
-								</Flex>
-							</Form.Field>
+							<NameField disabled={state === 'active'} />
 
-							<Form.Field
-								asChild
-								name={'summary'}>
-								<Flex
-									asChild
-									direction={'column'}>
-									<Box mb={'5'}>
-										<FormLabel>{'Summary'}</FormLabel>
-										<Form.Message match={'valueMissing'}>
-											{'Summary is required'}
-										</Form.Message>
-										<Form.Control asChild>
-											<TextArea
-												disabled={state === 'active'}
-												required
-											/>
-										</Form.Control>
-									</Box>
-								</Flex>
-							</Form.Field>
+							<SummaryField disabled={state === 'active'} />
 
-							<GameTypesDropdown disabled={state === 'active'} />
+							<TypesField disabled={state === 'active'} />
 
-							<GameModesDropdown disabled={state === 'active'} />
+							{/* parent */}
+
+							<ModesField disabled={state === 'active'} />
+
+							<GenresField disabled={state === 'active'} />
+
+							<ThemesField disabled={state === 'active'} />
+
+							<PlayerPerspectivesField disabled={state === 'active'} />
+
+							{/* releaseDates */}
 						</Flex>
 
 						<Flex

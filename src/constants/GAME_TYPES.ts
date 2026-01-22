@@ -1,64 +1,30 @@
-export const GAME_TYPES = [
-	{
-		label: 'Core',
-		items: [
-			{
-				id: 'game',
-				name: 'Game',
-			},
-			{
-				id: 'port',
-				name: 'Port',
-			},
-			{
-				id: 'remake',
-				name: 'Remake',
-			},
-			{
-				id: 'remaster',
-				name: 'Remaster',
-			},
-			{
-				id: 'expanded-game',
-				name: 'Expanded Game',
-			},
-			{
-				id: 'standalone-expansion',
-				name: 'Standalone Expansion',
-			},
-		],
+// Local imports
+import { ApplicationType } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
+import ApplicationTypeLexicon from '@/lexicons/games/gamesgamesgamesgames/applicationType.json'
+
+// Types
+type ApplicationTypeLexiconIDs = keyof typeof ApplicationTypeLexicon.defs
+
+export const GAME_TYPES = Object.entries(ApplicationTypeLexicon.defs).reduce(
+	(accumulator, kv) => {
+		const [id, { description: name }] = kv as [
+			ApplicationTypeLexiconIDs,
+			{ description: string },
+		]
+
+		const fqid = `games.gamesgamesgamesgames.applicationType#${id}` as ApplicationType
+		
+		accumulator[fqid] = {
+			id,
+			fqid,
+			name,
+		}
+
+		return accumulator
 	},
-	{
-		label: 'Expansion',
-		items: [
-			{
-				id: 'dlc',
-				name: 'Downloadable Content (DLC)',
-			},
-			{
-				id: 'addon',
-				name: 'Pack / Addon',
-			},
-			{
-				id: 'expansion',
-				name: 'Expansion',
-			},
-		],
-	},
-	{
-		label: 'Episodic',
-		items: [
-			{ id: 'bundle', name: 'Bundle' },
-			{ id: 'season', name: 'Season' },
-			{ id: 'update', name: 'Update' },
-			{ id: 'episode', name: 'Episode' },
-		],
-	},
-	{
-		label: 'Third Party',
-		items: [
-			{ id: 'mod', name: 'Mod' },
-			{ id: 'fork', name: 'Fork' },
-		],
-	},
-]
+	{} as Record<ApplicationType, {
+		id: ApplicationTypeLexiconIDs,
+		fqid: ApplicationType,
+		name: string,
+	}>,
+)

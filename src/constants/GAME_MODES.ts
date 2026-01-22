@@ -1,27 +1,30 @@
-export const GAME_MODES = [
-	{
-		name: 'Single Player',
-		id: 'single-player',
-		description: '',
+// Local imports
+import { Mode } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
+import ModeLexicon from '@/lexicons/games/gamesgamesgamesgames/mode.json'
+
+// Types
+type ModeLexiconIDs = keyof typeof ModeLexicon.defs
+
+export const GAME_MODES = Object.entries(ModeLexicon.defs).reduce(
+	(accumulator, kv) => {
+		const [id, { description: name }] = kv as [
+			ModeLexiconIDs,
+			{ description: string },
+		]
+
+		const fqid = `games.gamesgamesgamesgames.mode#${id}` as Mode 
+
+		accumulator[fqid] = {
+			id,
+			fqid,
+			name,
+		}
+
+		return accumulator
 	},
-	{
-		name: 'Multiplayer',
-		id: 'multiplayer',
-		description: '',
-	},
-	{
-		name: 'Co-op',
-		id: 'cooperative',
-		description: '',
-	},
-	{
-		name: 'Split Screen',
-		id: 'split-screen',
-		description: '',
-	},
-	{
-		name: 'MMO',
-		id: 'mmo',
-		description: '',
-	},
-]
+	{} as Record<Mode, {
+		id: ModeLexiconIDs,
+		fqid: Mode,
+		name: string,
+	}>,
+)

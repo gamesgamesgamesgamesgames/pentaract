@@ -6,24 +6,25 @@ import { useMemo, type ReactNode } from 'react'
 // Local imports
 import { FormLabel } from '@/components/FormLabel/FormLabel'
 import { GAME_TYPES } from '@/constants/GAME_TYPES'
+import { GAME_TYPES_CATEGORIES } from '@/constants/GAME_TYPES_CATEGORIES'
 
 // Types
 type Props = Readonly<{ disabled?: boolean }>
 
-export function GameTypesDropdown(props: Props) {
+export function TypesField(props: Props) {
 	const { disabled } = props
 
 	const options = useMemo(
 		() =>
-			GAME_TYPES.reduce((accumulator, typeGroup, index, array) => {
+			GAME_TYPES_CATEGORIES.reduce((accumulator, typeGroup, index, array) => {
 				accumulator.push(
 					<Select.Group key={typeGroup.label}>
 						<Select.Label>{typeGroup.label}</Select.Label>
-						{typeGroup.items.map((type) => (
+						{typeGroup.items.map((id) => (
 							<Select.Item
-								key={type.id}
-								value={type.id}>
-								{type.name}
+								key={id}
+								value={id}>
+								{GAME_TYPES[id].name}
 							</Select.Item>
 						))}
 					</Select.Group>,
