@@ -31,13 +31,7 @@ export async function listGames() {
 					node {
 						uri
 						did
-						applicationType
-						genres
-						modes
 						name
-						playerPerspectives
-						summary
-						themes
 					}
 				}
 				pageInfo {

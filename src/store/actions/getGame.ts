@@ -29,10 +29,13 @@ export async function getGame(uri: string) {
 					node {
 						uri
 						did
-						name
-						summary
-						type
+						applicationType
+						genres
 						modes
+						name
+						playerPerspectives
+						summary
+						themes
 					}
 				}
 			}
