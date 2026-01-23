@@ -1,7 +1,7 @@
 'use client'
 
 // Module imports
-import { DataList, Flex, Text } from '@radix-ui/themes'
+import { DataList, Em, Flex, Text } from '@radix-ui/themes'
 
 // Local imports
 import { CommaSeparatedList } from '@/components/CommaSeparatedList/CommaSeparatedList'
@@ -34,11 +34,27 @@ export function DashboardCatalogNewGameReview() {
 			<DataList.Root>
 				<DataList.Item>
 					<DataList.Label>{'Name'}</DataList.Label>
-					<DataList.Value>{name}</DataList.Value>
+					<DataList.Value>
+						{name || (
+							<Text
+								color={'tomato'}
+								style={{ fontStyle: 'italic' }}>
+								{'Name is required'}
+							</Text>
+						)}
+					</DataList.Value>
 				</DataList.Item>
 				<DataList.Item>
 					<DataList.Label>{'Summary'}</DataList.Label>
-					<DataList.Value>{summary}</DataList.Value>
+					<DataList.Value>
+						{summary || (
+							<Text
+								color={'gold'}
+								style={{ fontStyle: 'italic' }}>
+								{'No summary provided.'}
+							</Text>
+						)}
+					</DataList.Value>
 				</DataList.Item>
 				<DataList.Item>
 					<DataList.Label>{'Type'}</DataList.Label>
@@ -51,33 +67,41 @@ export function DashboardCatalogNewGameReview() {
 				<DataList.Item>
 					<DataList.Label>{'Genres'}</DataList.Label>
 					<DataList.Value>
-						{genres ? (
+						{genres?.length ? (
 							<CommaSeparatedList
 								includeLinks
 								items={genres.map((genre) => GAME_GENRES[genre]!.name)}
 							/>
 						) : (
-							'No genres provided'
+							<Text
+								color={'gold'}
+								style={{ fontStyle: 'italic' }}>
+								{'No genres provided'}
+							</Text>
 						)}
 					</DataList.Value>
 				</DataList.Item>
 				<DataList.Item>
 					<DataList.Label>{'Themes'}</DataList.Label>
 					<DataList.Value>
-						{themes ? (
+						{themes?.length ? (
 							<CommaSeparatedList
 								includeLinks
 								items={themes.map((theme) => GAME_THEMES[theme]!.name)}
 							/>
 						) : (
-							'No themes provided'
+							<Text
+								color={'gold'}
+								style={{ fontStyle: 'italic' }}>
+								{'No themes provided'}
+							</Text>
 						)}
 					</DataList.Value>
 				</DataList.Item>
 				<DataList.Item>
 					<DataList.Label>{'Player Perspectives'}</DataList.Label>
 					<DataList.Value>
-						{playerPerspectives ? (
+						{playerPerspectives?.length ? (
 							<CommaSeparatedList
 								includeLinks
 								items={playerPerspectives.map(
@@ -86,20 +110,28 @@ export function DashboardCatalogNewGameReview() {
 								)}
 							/>
 						) : (
-							'No player perspectives provided'
+							<Text
+								color={'gold'}
+								style={{ fontStyle: 'italic' }}>
+								{'No player perspectives provided'}
+							</Text>
 						)}
 					</DataList.Value>
 				</DataList.Item>
 				<DataList.Item>
 					<DataList.Label>{'Modes'}</DataList.Label>
 					<DataList.Value>
-						{modes ? (
+						{modes?.length ? (
 							<CommaSeparatedList
 								includeLinks
 								items={modes.map((mode) => GAME_MODES[mode]!.name)}
 							/>
 						) : (
-							'No modes provided'
+							<Text
+								color={'gold'}
+								style={{ fontStyle: 'italic' }}>
+								{'No modes provided'}
+							</Text>
 						)}
 					</DataList.Value>
 				</DataList.Item>
