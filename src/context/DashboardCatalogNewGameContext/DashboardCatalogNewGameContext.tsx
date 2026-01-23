@@ -17,6 +17,8 @@ type Props = PropsWithChildren
 
 export const DashboardCatalogNewGameContext = createContext<
 	Partial<GameRecord> & {
+		isPublishable: boolean
+		isSaveable: boolean
 		setApplicationType: (applicationType: GameRecord['applicationType']) => void
 		setGenres: (genres: GameRecord['genres']) => void
 		setModes: (modes: GameRecord['modes']) => void
@@ -31,6 +33,8 @@ export const DashboardCatalogNewGameContext = createContext<
 	}
 >({
 	applicationType: 'games.gamesgamesgamesgames.applicationType#game',
+	isPublishable: false,
+	isSaveable: false,
 	setApplicationType: () => {},
 	setGenres: () => {},
 	setModes: () => {},
@@ -73,6 +77,15 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 
 	const providerValue = useMemo(
 		() => ({
+			isPublishable:
+				Boolean(name) &&
+				Boolean(summary) &&
+				genres!.length > 0 &&
+				modes!.length > 0 &&
+				playerPerspectives!.length > 0 &&
+				themes!.length > 0,
+			isSaveable: Boolean(name),
+
 			applicationType,
 			genres,
 			modes,

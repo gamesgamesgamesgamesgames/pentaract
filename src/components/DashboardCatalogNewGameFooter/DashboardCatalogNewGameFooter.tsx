@@ -1,5 +1,7 @@
 // Module imports
 import { Box, Button, Flex } from '@radix-ui/themes'
+import { faSave, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Local imports
 import { Link } from '@/components/Link/Link'
@@ -13,7 +15,8 @@ type Props = Readonly<{
 export function DashboardCatalogNewGameFooter(props: Props) {
 	const { next, previous } = props
 
-	const { state } = useDashboardCatalogNewGameContext()
+	const { isPublishable, isSaveable, state } =
+		useDashboardCatalogNewGameContext()
 
 	return (
 		<Flex
@@ -22,8 +25,10 @@ export function DashboardCatalogNewGameFooter(props: Props) {
 			mt={'4'}>
 			<Box mr={'4'}>
 				<Button
+					disabled={!isSaveable}
 					loading={state === 'active'}
 					variant={'outline'}>
+					<FontAwesomeIcon icon={faSave} />
 					{'Save Draft'}
 				</Button>
 			</Box>
@@ -47,7 +52,14 @@ export function DashboardCatalogNewGameFooter(props: Props) {
 					</Link>
 				)}
 
-				{!next && <Button color={'green'}>{'Create Game'}</Button>}
+				{!next && (
+					<Button
+						disabled={!isPublishable}
+						color={'green'}>
+						<FontAwesomeIcon icon={faUpload} />
+						{'Publish'}
+					</Button>
+				)}
 			</Flex>
 		</Flex>
 	)
