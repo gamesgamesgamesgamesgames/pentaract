@@ -15,7 +15,6 @@ import { useStore } from 'statery'
 import { type DID } from '@/typedefs/DID'
 import { type Game } from '@/typedefs/Game'
 import { getGame } from '@/store/actions/getGame'
-import { listGames } from '@/store/actions/listGames'
 import { useParams } from 'next/navigation'
 import { type State } from '@/typedefs/State'
 import { store } from '@/store/store'
@@ -70,14 +69,7 @@ export function DashboardCatalogGameContextProvider(props: Props) {
 	useEffect(() => {
 		if (user && !game?.isHydrated && state === 'idle') {
 			setState('active')
-
-			if (!gamesCatalog) {
-				listGames()
-					.then(() => getGame(gameURI))
-					.then(handleGameLoaded)
-			} else {
-				getGame(gameURI).then(handleGameLoaded)
-			}
+			getGame(gameURI).then(handleGameLoaded)
 		}
 	}, [gameURI, handleGameLoaded, state, user])
 
