@@ -2,6 +2,7 @@
 import { createQuicksliceClient } from 'quickslice-client-js'
 
 // Local imports
+import { getUserProfile } from '@/store/actions/getUserProfile'
 import { store } from '@/store/store'
 import { subscribe } from '@/store/subscribe'
 
@@ -19,8 +20,7 @@ export async function initialize() {
 	store.set(() => ({ quicksliceClient }))
 
 	if (await quicksliceClient.isAuthenticated()) {
-		const user = await quicksliceClient.getUser()
-		store.set(() => ({ user }))
+		await getUserProfile()
 		subscribe()
 	}
 }

@@ -1,8 +1,10 @@
 // Module imports
-import { type QuicksliceClient, type User } from 'quickslice-client-js'
+import { type QuicksliceClient } from 'quickslice-client-js'
 import { type Game } from '@/typedefs/Game'
 
-// Module imports
+// Local imports
+import { User } from '@/typedefs/User'
+
 export type GlobalState = {
 	gamesCatalog: null | Game[]
 	gamesCatalogCursor: null | string
