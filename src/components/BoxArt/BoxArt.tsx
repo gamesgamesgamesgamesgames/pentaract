@@ -1,25 +1,30 @@
 // Local imports
 import { AspectRatio } from '@/components/ui/aspect-ratio'
-import { type Game } from '@/typedefs/Game'
+import { type ComponentProps } from 'react'
+import { type GameRecord } from '@/typedefs/GameRecord'
 import { Skeleton } from '@radix-ui/themes'
 
 // Types
-type Props = {
-	game?: Game
-}
+type Props = Readonly<
+	ComponentProps<'div'> & {
+		gameRecord?: GameRecord
+	}
+>
 
 export function BoxArt(props: Props) {
-	const { game } = props
+	const { className, gameRecord } = props
 
 	return (
-		<Skeleton loading={!game}>
-			<AspectRatio ratio={2 / 3}>
-				<img
-					alt={`Box art for ${game?.record.name}`}
-					className={'relative h-full w-full object-cover'}
-					src={'https://placehold.co/200x300'}
-				/>
-			</AspectRatio>
-		</Skeleton>
+		<div className={className}>
+			<Skeleton loading={!gameRecord}>
+				<AspectRatio ratio={2 / 3}>
+					<img
+						alt={`Box art for ${gameRecord?.name}`}
+						className={'relative h-full w-full object-cover'}
+						src={'https://placehold.co/200x300'}
+					/>
+				</AspectRatio>
+			</Skeleton>
+		</div>
 	)
 }
