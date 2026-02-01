@@ -60,24 +60,24 @@ export async function GamePage(props: Props) {
 								<Header>{gameRecord.name}</Header>
 
 								<div className={'flex flex-wrap gap-2'}>
-									<Badge variant={'ghost'}>
+									<Badge variant={'outline'}>
 										<FontAwesomeIcon icon={faBusinessTime} />
 										{'Developer Studio, LLC'}
 									</Badge>
 
-									<Badge variant={'ghost'}>
+									<Badge variant={'outline'}>
 										<FontAwesomeIcon icon={faCalendar} />
 										{'2017'}
 									</Badge>
 
-									<Badge variant={'ghost'}>
+									<Badge variant={'outline'}>
 										<FontAwesomeIcon icon={faStarHalfAlt} />
 										{'9.3'}
 									</Badge>
 								</div>
 
 								<div className={'flex flex-wrap gap-2'}>
-									<Badge variant={'ghost'}>{'Nintendo Switch'}</Badge>
+									<Badge variant={'outline'}>{'Nintendo Switch'}</Badge>
 								</div>
 
 								<div className={'flex flex-wrap gap-2'}>
@@ -85,7 +85,7 @@ export async function GamePage(props: Props) {
 										gameRecord.genres!.map((genre) => (
 											<Badge
 												key={genre}
-												variant={'ghost'}>
+												variant={'outline'}>
 												{GAME_GENRES[genre].name}
 											</Badge>
 										))}
