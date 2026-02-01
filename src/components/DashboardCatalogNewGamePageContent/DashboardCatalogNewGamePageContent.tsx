@@ -1,20 +1,23 @@
+// Module imports
+import { useMemo } from 'react'
+
 // Local imports
-import { DashboardCatalogNewGameCategorization } from '@/components/DashboardCatalogNewGameCategorization/DashboardCatalogNewGameCategorization'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
-import { DashboardCatalogNewGameGeneral } from '@/components/DashboardCatalogNewGameGeneral/DashboardCatalogNewGameGeneral'
-import { DashboardCatalogNewGameReleases } from '@/components/DashboardCatalogNewGameReleases/DashboardCatalogNewGameReleases'
-import { DashboardCatalogNewGameReview } from '@/components/DashboardCatalogNewGameReview/DashboardCatalogNewGameReview'
-import { ScrollArea } from '../ui/scroll-area'
 
 export function DashboardCatalogNewGamePageContent() {
-	const { currentStepIndex } = useDashboardCatalogNewGameContext()
+	const { currentStepIndex, steps } = useDashboardCatalogNewGameContext()
 
-	return (
-		<ScrollArea className={'flex-grow'}>
-			{currentStepIndex === 0 && <DashboardCatalogNewGameGeneral />}
-			{currentStepIndex === 1 && <DashboardCatalogNewGameCategorization />}
-			{currentStepIndex === 2 && <DashboardCatalogNewGameReleases />}
-			{currentStepIndex === 3 && <DashboardCatalogNewGameReview />}
-		</ScrollArea>
+	const contentElements = useMemo(
+		() =>
+			steps.map((step, index) => {
+				if (currentStepIndex !== index) {
+					return null
+				}
+
+				return <step.component key={JSON.stringify(step)} />
+			}),
+		[currentStepIndex],
 	)
+	return <ScrollArea className={'flex-grow'}>{contentElements}</ScrollArea>
 }
