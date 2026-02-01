@@ -19,24 +19,10 @@ const BREADCRUMBS = [
 		url: '/dashboard/catalog/new-game/general',
 	},
 ]
-const STEPS = [
-	{
-		title: 'General',
-	},
-	{
-		title: 'Categorization',
-	},
-	{
-		title: 'Releases',
-	},
-	{
-		title: 'Review',
-	},
-]
 
 export function DashboardCatalogNewGamePage() {
 	return (
-		<DashboardCatalogNewGameContextProvider steps={STEPS}>
+		<DashboardCatalogNewGameContextProvider>
 			<DashboardHeader breadcrumbs={BREADCRUMBS} />
 
 			<Container>

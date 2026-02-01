@@ -25,6 +25,7 @@ import {
 import { GenreError } from '@/context/DashboardCatalogNewGameContext/GenreError'
 import { ModeError } from '@/context/DashboardCatalogNewGameContext/ModeError'
 import { NameError } from '@/context/DashboardCatalogNewGameContext/NameError'
+import { NEW_GAME_STEPS } from '@/constants/NEW_GAME_STEPS'
 import { PlayerPerspectiveError } from '@/context/DashboardCatalogNewGameContext/PlayerPerspectiveError'
 import { parseATURI } from '@/helpers/parseATURI'
 import { type State } from '@/typedefs/State'
@@ -32,24 +33,7 @@ import { type StepperStep } from '@/typedefs/StepperStep'
 import { SummaryError } from '@/context/DashboardCatalogNewGameContext/SummaryError'
 
 // Types
-type Props = Readonly<
-	PropsWithChildren<{
-		steps: StepperStep[]
-	}>
->
-
-// publishErrors: [
-// 	name ? null : 'Name is required.',
-// 	summary ? null : 'Summary is required.',
-// 	genres!.size ? null : 'At least 1 Genre is required.',
-// 	modes!.size ? null : 'At least 1 Mode is required.',
-// 	playerPerspectives!.size
-// 		? null
-// 		: 'At least 1 Player Perspective is required.',
-// ].filter(Boolean) as string[],
-// saveErrors: [name ? null : 'Name is required.'].filter(
-// 	Boolean,
-// ) as string[],
+type Props = Readonly<PropsWithChildren>
 
 export const DashboardCatalogNewGameContext = createContext<
 	Partial<
@@ -121,9 +105,11 @@ export const DashboardCatalogNewGameContext = createContext<
 })
 
 export function DashboardCatalogNewGameContextProvider(props: Props) {
-	const { children, steps } = props
+	const { children } = props
 
 	const router = useRouter()
+
+	const [steps] = useState(NEW_GAME_STEPS)
 
 	const [currentStepIndex, setCurrentStepIndex] = useState(0)
 	const [state, setState] = useState<State>('idle')
