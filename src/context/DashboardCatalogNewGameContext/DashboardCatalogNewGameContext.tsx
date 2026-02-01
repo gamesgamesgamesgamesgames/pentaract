@@ -235,16 +235,22 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 	)
 
 	const nextStep = useCallback(
-		() => setCurrentStepIndex(currentStepIndex + 1),
-		[currentStepIndex],
+		() => setCurrentStepIndex(Math.min(steps.length - 1, currentStepIndex + 1)),
+		[currentStepIndex, steps],
 	)
 	const previousStep = useCallback(
-		() => setCurrentStepIndex(currentStepIndex - 1),
-		[currentStepIndex],
+		() => setCurrentStepIndex(Math.max(0, currentStepIndex - 1)),
+		[currentStepIndex, steps],
 	)
 	const goToStepIndex = useCallback(
-		(stepIndex: number) => setCurrentStepIndex(stepIndex),
-		[],
+		(stepIndex: number) => {
+			if (stepIndex < 0 || stepIndex > steps.length - 1) {
+				throw new RangeError(`Step ${stepIndex} doesn't exist.`)
+			}
+
+			setCurrentStepIndex(stepIndex)
+		},
+		[steps],
 	)
 
 	const publishGame = useCallback(() => saveGame(true), [saveGame])
