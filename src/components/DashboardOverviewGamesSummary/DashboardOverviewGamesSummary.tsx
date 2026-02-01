@@ -1,34 +1,19 @@
-// Module imports
-import {
-	Button,
-	Card,
-	Flex,
-	Heading,
-	ScrollArea,
-	Section,
-	Separator,
-	Text,
-} from '@radix-ui/themes'
-
 // Local imports
 import { BoxArt } from '@/components/BoxArt/BoxArt'
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@/components/Link/Link'
 
 export function DashboardOverviewGamesSummary() {
 	return (
-		<Section pt={'0'}>
+		<>
 			<Card>
-				<Flex
-					direction={'column'}
-					gap={'3'}
-					width={'100%'}>
-					<Heading>{'Games'}</Heading>
+				<CardHeader>
+					<CardTitle>{'Games'}</CardTitle>
+				</CardHeader>
 
-					<Separator size={'4'} />
-
-					<Flex
-						gap={'3'}
-						justify={'between'}>
+				<div className={'flex flex-col w-full'}>
+					<div className={'flex gap-3 justify-between'}>
 						<BoxArt />
 						<BoxArt />
 						<BoxArt />
@@ -37,17 +22,15 @@ export function DashboardOverviewGamesSummary() {
 						<BoxArt />
 						<BoxArt />
 						<BoxArt />
-					</Flex>
+					</div>
 
 					<Button
 						asChild
 						variant={'outline'}>
-						<Link href={'/dashboard/catalog'}>
-							<Text>{'See All'}</Text>
-						</Link>
+						<Link href={'/dashboard/catalog'}>{'See All'}</Link>
 					</Button>
-				</Flex>
+				</div>
 			</Card>
-		</Section>
+		</>
 	)
 }

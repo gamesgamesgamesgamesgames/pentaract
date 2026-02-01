@@ -1,7 +1,6 @@
 'use client'
 
 // Module imports
-import { Flex, Grid } from '@radix-ui/themes'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStore } from 'statery'
@@ -60,24 +59,22 @@ export function DashboardCatalog() {
 	const gamesElements = useMemo(() => {
 		if (gamesCatalog === null) {
 			return (
-				<Grid
-					columns={'5'}
-					gap={'6'}>
+				<div
+					className={
+						'auto-rows-min gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row'
+					}>
 					{NULL_GAMES.map((_, index) => (
 						<BoxArt key={index} />
 					))}
-				</Grid>
+				</div>
 			)
 		}
 
 		if (!gamesCatalog.length) {
 			return (
-				<Flex
-					align={'center'}
-					height={'100%'}
-					justify={'center'}>
+				<div className={'flex h-full items-center justify-center'}>
 					{'No games found.'}
-				</Flex>
+				</div>
 			)
 		}
 
@@ -97,7 +94,7 @@ export function DashboardCatalog() {
 							}>
 							<BoxArt
 								key={parseATURI(game.record.uri).rkey}
-								game={game}
+								gameRecord={game.record}
 							/>
 
 							<div
@@ -144,7 +141,7 @@ export function DashboardCatalog() {
 				controls={controls}
 			/>
 
-			<Container className={'p-4'}>
+			<Container>
 				{gamesElements}
 
 				{state !== 'active' && gamesCatalogHasNextPage && (

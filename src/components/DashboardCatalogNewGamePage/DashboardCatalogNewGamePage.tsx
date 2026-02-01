@@ -39,7 +39,7 @@ export function DashboardCatalogNewGamePage() {
 		<DashboardCatalogNewGameContextProvider steps={STEPS}>
 			<DashboardHeader breadcrumbs={BREADCRUMBS} />
 
-			<Container className={'p-4'}>
+			<Container>
 				<div className={'flex gap-4 h-full'}>
 					<DashboardCatalogNewGamePageStepper />
 

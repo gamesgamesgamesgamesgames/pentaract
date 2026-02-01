@@ -1,13 +1,11 @@
 'use client'
 
 // Module imports
-import { Container } from '@radix-ui/themes'
 import { type CSSProperties, type PropsWithChildren } from 'react'
 
 // Local imports
 import { DashboardNavigation } from '@/components/DashboardNavigation/DashboardNavigation'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { SiteHeader } from '@/components/blocks/site-header'
 
 // Types
 type Props = Readonly<PropsWithChildren>

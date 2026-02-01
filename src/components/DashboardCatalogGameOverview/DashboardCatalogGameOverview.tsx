@@ -1,10 +1,12 @@
 'use client'
 
-// Module imports
-import { DataList, Flex, Text } from '@radix-ui/themes'
-
 // Local imports
-import { CommaSeparatedList } from '../CommaSeparatedList/CommaSeparatedList'
+import { CommaSeparatedList } from '@/components/CommaSeparatedList/CommaSeparatedList'
+import {
+	DataList,
+	DataListLabel,
+	DataListValue,
+} from '@/components/DataList/DataList'
 import { GAME_APPLICATION_TYPES } from '@/constants/GAME_APPLICATION_TYPES'
 import { GAME_MODES } from '@/constants/GAME_MODES'
 import { GAME_GENRES } from '@/constants/GAME_GENRES'
@@ -18,112 +20,90 @@ export function DashboardCatalogGameOverview() {
 	const gameRecord = game?.record!
 
 	return (
-		<Flex direction={'column'}>
-			<Text>{gameRecord.name}</Text>
+		<div className={'flex flex-col'}>
+			<div>{gameRecord.name}</div>
 
-			<Text>{gameRecord.summary}</Text>
+			<div>{gameRecord.summary}</div>
 
-			<DataList.Root>
-				<DataList.Item>
-					<DataList.Label>{'Name'}</DataList.Label>
-					<DataList.Value>{gameRecord.name}</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Summary'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.summary || (
-							<Text
-								color={'gold'}
-								style={{ fontStyle: 'italic' }}>
-								{'No summary provided.'}
-							</Text>
-						)}
-					</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Type'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.applicationType
-							? GAME_APPLICATION_TYPES[gameRecord.applicationType].name
-							: ''}
-					</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Genres'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.genres?.length ? (
-							<CommaSeparatedList
-								includeLinks
-								items={gameRecord.genres.map(
-									(genre) => GAME_GENRES[genre]!.name,
-								)}
-							/>
-						) : (
-							<Text
-								color={'gold'}
-								style={{ fontStyle: 'italic' }}>
-								{'No genres provided'}
-							</Text>
-						)}
-					</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Themes'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.themes?.length ? (
-							<CommaSeparatedList
-								includeLinks
-								items={gameRecord.themes.map(
-									(theme) => GAME_THEMES[theme]!.name,
-								)}
-							/>
-						) : (
-							<Text
-								color={'gold'}
-								style={{ fontStyle: 'italic' }}>
-								{'No themes provided'}
-							</Text>
-						)}
-					</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Player Perspectives'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.playerPerspectives?.length ? (
-							<CommaSeparatedList
-								includeLinks
-								items={gameRecord.playerPerspectives.map(
-									(playerPerspective) =>
-										GAME_PLAYER_PERSPECTIVES[playerPerspective]!.name,
-								)}
-							/>
-						) : (
-							<Text
-								color={'gold'}
-								style={{ fontStyle: 'italic' }}>
-								{'No player perspectives provided'}
-							</Text>
-						)}
-					</DataList.Value>
-				</DataList.Item>
-				<DataList.Item>
-					<DataList.Label>{'Modes'}</DataList.Label>
-					<DataList.Value>
-						{gameRecord.modes?.length ? (
-							<CommaSeparatedList
-								includeLinks
-								items={gameRecord.modes.map((mode) => GAME_MODES[mode]!.name)}
-							/>
-						) : (
-							<Text
-								color={'gold'}
-								style={{ fontStyle: 'italic' }}>
-								{'No modes provided'}
-							</Text>
-						)}
-					</DataList.Value>
-				</DataList.Item>
-			</DataList.Root>
-		</Flex>
+			<DataList>
+				<DataListLabel>{'Name'}</DataListLabel>
+				<DataListValue>{gameRecord.name}</DataListValue>
+
+				<DataListLabel>{'Summary'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.summary || (
+						<span className={'italic text-muted-foreground'}>
+							{'No summary provided.'}
+						</span>
+					)}
+				</DataListValue>
+
+				<DataListLabel>{'Type'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.applicationType
+						? GAME_APPLICATION_TYPES[gameRecord.applicationType].name
+						: ''}
+				</DataListValue>
+
+				<DataListLabel>{'Genres'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.genres?.length ? (
+						<CommaSeparatedList
+							includeLinks
+							items={gameRecord.genres.map((genre) => GAME_GENRES[genre]!.name)}
+						/>
+					) : (
+						<span className={'italic text-muted-foreground'}>
+							{'No genres provided'}
+						</span>
+					)}
+				</DataListValue>
+
+				<DataListLabel>{'Themes'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.themes?.length ? (
+						<CommaSeparatedList
+							includeLinks
+							items={gameRecord.themes.map((theme) => GAME_THEMES[theme]!.name)}
+						/>
+					) : (
+						<span className={'italic text-muted-foreground'}>
+							{'No themes provided'}
+						</span>
+					)}
+				</DataListValue>
+
+				<DataListLabel>{'Player Perspectives'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.playerPerspectives?.length ? (
+						<CommaSeparatedList
+							includeLinks
+							items={gameRecord.playerPerspectives.map(
+								(playerPerspective) =>
+									GAME_PLAYER_PERSPECTIVES[playerPerspective]!.name,
+							)}
+						/>
+					) : (
+						<span className={'italic text-muted-foreground'}>
+							{'No player perspectives provided'}
+						</span>
+					)}
+				</DataListValue>
+
+				<DataListLabel>{'Modes'}</DataListLabel>
+				<DataListValue>
+					{gameRecord.modes?.length ? (
+						<CommaSeparatedList
+							includeLinks
+							items={gameRecord.modes.map((mode) => GAME_MODES[mode]!.name)}
+						/>
+					) : (
+						<span className={'italic text-muted-foreground'}>
+							{'No modes provided'}
+						</span>
+					)}
+				</DataListValue>
+			</DataList>
+		</div>
 	)
 }

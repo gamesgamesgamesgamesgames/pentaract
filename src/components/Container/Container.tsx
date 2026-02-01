@@ -14,7 +14,7 @@ export function Container(props: Props) {
 				'flex flex-col grow items-center shrink-0',
 				className,
 			)}>
-			<div className={'h-full max-w-6xl w-full'}>{children}</div>
+			<div className={'h-full max-w-6xl p-4 w-full'}>{children}</div>
 		</div>
 	)
 }

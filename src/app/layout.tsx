@@ -43,11 +43,7 @@ export default function RootLayoutWrapper(props: Props) {
 					defaultTheme={'system'}
 					enableSystem
 					disableTransitionOnChange>
-					<Theme
-						appearance={'dark'}
-						radius={'none'}>
-						<RootLayout>{children}</RootLayout>
-					</Theme>
+					<RootLayout>{children}</RootLayout>
 				</ThemeProvider>
 			</body>
 		</html>

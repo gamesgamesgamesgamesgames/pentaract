@@ -1,6 +1,5 @@
 // Module imports
 import { type ReactNode, useMemo } from 'react'
-import { Text } from '@radix-ui/themes'
 
 // Local imports
 import { Link } from '@/components/Link/Link'
@@ -17,7 +16,7 @@ export function CommaSeparatedList(props: Props) {
 	const renderedList = useMemo(
 		() =>
 			items.reduce((accumulator, item, index, array) => {
-				let result = <Text>{item}</Text>
+				let result = <span>{item}</span>
 
 				if (includeLinks) {
 					result = (
@@ -40,5 +39,5 @@ export function CommaSeparatedList(props: Props) {
 		[items],
 	)
 
-	return <Text>{renderedList}</Text>
+	return <span>{renderedList}</span>
 }

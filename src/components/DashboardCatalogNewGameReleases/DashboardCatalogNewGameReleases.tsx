@@ -1,8 +1,5 @@
 'use client'
 
-// Module imports
-import { Flex } from '@radix-ui/themes'
-
 // Local imports
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
