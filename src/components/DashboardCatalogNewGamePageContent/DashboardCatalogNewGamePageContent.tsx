@@ -2,7 +2,6 @@
 import { useMemo } from 'react'
 
 // Local imports
-import { Scroller } from '@/components/ui/scroller'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
 export function DashboardCatalogNewGamePageContent() {
@@ -19,5 +18,5 @@ export function DashboardCatalogNewGamePageContent() {
 			}),
 		[currentStepIndex],
 	)
-	return <Scroller className={'h-full'}>{contentElements}</Scroller>
+	return contentElements
 }

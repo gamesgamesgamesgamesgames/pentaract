@@ -8,6 +8,7 @@ import { type ApplicationType } from '@/helpers/lexicons/games/gamesgamesgamesga
 import { ApplicationTypeField } from '@/components/ApplicationTypeField/ApplicationTypeField'
 import { Card, CardContent } from '@/components/ui/card'
 import { NameField } from '@/components/NameField/NameField'
+import { Scroller } from '@/components/ui/scroller'
 import { SummaryField } from '@/components/SummaryField/SummaryField'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
@@ -42,40 +43,39 @@ export function DashboardCatalogNewGameGeneral() {
 	const isDisabled = state === 'active'
 
 	return (
-		<div className={'flex flex-col gap-4'}>
-			<Card>
-				{/* <CardHeader>
-				<CardTitle>{label}</CardTitle>
-			</CardHeader> */}
+		<Scroller className={'h-full'}>
+			<div className={'flex flex-col gap-4'}>
+				<Card>
+					<CardContent className={'flex flex-col gap-4'}>
+						<NameField
+							disabled={isDisabled}
+							onChange={handleNameChange}
+							value={name ?? ''}
+						/>
 
-				<CardContent className={'flex flex-col gap-4'}>
-					<NameField
-						disabled={isDisabled}
-						onChange={handleNameChange}
-						value={name ?? ''}
-					/>
+						<SummaryField
+							disabled={isDisabled}
+							onChange={handleSummaryChange}
+							value={summary ?? ''}
+						/>
+					</CardContent>
+				</Card>
 
-					<SummaryField
-						disabled={isDisabled}
-						onChange={handleSummaryChange}
-						value={summary ?? ''}
-					/>
-				</CardContent>
-			</Card>
-			<Card>
-				<CardContent>
-					<ApplicationTypeField
-						disabled={isDisabled}
-						onChange={handleApplicationTypeChange}
-						value={
-							applicationType ??
-							'games.gamesgamesgamesgames.applicationType#game'
-						}
-					/>
+				<Card>
+					<CardContent>
+						<ApplicationTypeField
+							disabled={isDisabled}
+							onChange={handleApplicationTypeChange}
+							value={
+								applicationType ??
+								'games.gamesgamesgamesgames.applicationType#game'
+							}
+						/>
 
-					{/* parent */}
-				</CardContent>
-			</Card>
-		</div>
+						{/* parent */}
+					</CardContent>
+				</Card>
+			</div>
+		</Scroller>
 	)
 }

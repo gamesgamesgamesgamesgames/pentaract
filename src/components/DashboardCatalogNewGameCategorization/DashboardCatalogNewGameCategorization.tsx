@@ -13,6 +13,7 @@ import {
 } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
 import { ModesField } from '@/components/ModesField/ModesField'
 import { PlayerPerspectivesField } from '@/components/PlayerPerspectivesField/PlayerPerspectivesField'
+import { Scroller } from '@/components/ui/scroller'
 import { ThemesField } from '@/components/ThemesField/ThemesField'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
@@ -80,32 +81,34 @@ export function DashboardCatalogNewGameCategorization() {
 	)
 
 	return (
-		<div className={'flex flex-col gap-4'}>
-			<GenresField
-				disabled={isDisabled}
-				onChange={handleGenresChange}
-				value={genres ?? new Set()}
-			/>
+		<Scroller className={'h-full'}>
+			<div className={'flex flex-col gap-4'}>
+				<GenresField
+					disabled={isDisabled}
+					onChange={handleGenresChange}
+					value={genres ?? new Set()}
+				/>
 
-			<ThemesField
-				disabled={isDisabled}
-				onChange={handleThemesChange}
-				value={themes ?? new Set()}
-			/>
+				<ThemesField
+					disabled={isDisabled}
+					onChange={handleThemesChange}
+					value={themes ?? new Set()}
+				/>
 
-			<PlayerPerspectivesField
-				disabled={isDisabled}
-				onChange={handlePlayerPerspectivesChange}
-				value={playerPerspectives ?? new Set()}
-			/>
+				<PlayerPerspectivesField
+					disabled={isDisabled}
+					onChange={handlePlayerPerspectivesChange}
+					value={playerPerspectives ?? new Set()}
+				/>
 
-			<ModesField
-				disabled={isDisabled}
-				onChange={handleModesChange}
-				value={modes ?? new Set()}
-			/>
+				<ModesField
+					disabled={isDisabled}
+					onChange={handleModesChange}
+					value={modes ?? new Set()}
+				/>
 
-			{/* releaseDates */}
-		</div>
+				{/* releaseDates */}
+			</div>
+		</Scroller>
 	)
 }
