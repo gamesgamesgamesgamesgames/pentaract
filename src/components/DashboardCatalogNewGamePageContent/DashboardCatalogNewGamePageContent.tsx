@@ -2,7 +2,7 @@
 import { useMemo } from 'react'
 
 // Local imports
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Scroller } from '@/components/ui/scroller'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
 export function DashboardCatalogNewGamePageContent() {
@@ -19,5 +19,5 @@ export function DashboardCatalogNewGamePageContent() {
 			}),
 		[currentStepIndex],
 	)
-	return <ScrollArea className={'flex-grow'}>{contentElements}</ScrollArea>
+	return <Scroller className={'h-full'}>{contentElements}</Scroller>
 }

@@ -23,7 +23,10 @@ export function DashboardLayout(props: Props) {
 			}>
 			<DashboardNavigation />
 
-			<SidebarInset>{children}</SidebarInset>
+			<SidebarInset
+				className={'h-(--main-height) justify-stretch overflow-hidden'}>
+				{children}
+			</SidebarInset>
 		</SidebarProvider>
 	)
 }

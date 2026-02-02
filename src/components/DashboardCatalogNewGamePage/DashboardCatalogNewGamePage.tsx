@@ -26,10 +26,10 @@ export function DashboardCatalogNewGamePage() {
 			<DashboardHeader breadcrumbs={BREADCRUMBS} />
 
 			<Container>
-				<div className={'flex gap-4 h-full'}>
+				<div className={'items-stretch flex gap-4 h-full overflow-hidden'}>
 					<DashboardCatalogNewGamePageStepper />
 
-					<div className={'flex flex-col h-full w-full'}>
+					<div className={'flex flex-col grow justify-stretch w-full'}>
 						<DashboardCatalogNewGamePageContent />
 
 						<DashboardCatalogNewGameFooter />
