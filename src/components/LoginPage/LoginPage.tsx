@@ -31,7 +31,6 @@ import {
 	Item,
 	ItemContent,
 	ItemDescription,
-	ItemHeader,
 	ItemTitle,
 } from '@/components/ui/item'
 import { Link } from '@/components/Link/Link'

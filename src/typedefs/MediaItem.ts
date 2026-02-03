@@ -1,15 +1,19 @@
 // Local imports
 import { type BCP47LanguageCode } from '@/typedefs/BCP47LanguageCode'
+import { type Cid } from '@atproto/lex'
 import { type MediaType } from '@/typedefs/MediaType'
 
 export type MediaItem = {
-	description: string
-	dimensions: null | {
-		height: number
-		width: number
+	blob: null | {
+		ref: Cid
+		mimeType: string
+		size: number
 	}
-	file: File
+	description: string
+	height: null | number
+	width: null | number
+	file?: File
 	locale: null | BCP47LanguageCode
-	title: string
 	mediaType: null | MediaType
+	title: string
 }

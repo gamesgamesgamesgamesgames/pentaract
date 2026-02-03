@@ -2,7 +2,7 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-	ChangeEventHandler,
+	type ChangeEventHandler,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -67,9 +67,9 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 	const imageElementRef = useRef<HTMLImageElement>(null)
 	const videoElementRef = useRef<HTMLVideoElement>(null)
 
-	const url = useMemo(() => URL.createObjectURL(mediaItem.file), [mediaItem])
+	const url = useMemo(() => URL.createObjectURL(mediaItem.file!), [mediaItem])
 
-	const keyPrefix = mediaItem.file.name.replace(' ', '-')
+	const keyPrefix = mediaItem.file!.name.replace(' ', '-')
 
 	const handleMediaItemTitleChange = useCallback<
 		ChangeEventHandler<HTMLInputElement>
@@ -120,31 +120,35 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 		[mediaItem, removeMedia],
 	)
 
+	const handleLoadedMetadata = useCallback((event: Event) => {
+		const target = event.target as HTMLVideoElement
+
+		target.removeEventListener('loadedmetadata', handleLoadedMetadata)
+
+		updateMedia({
+			...mediaItem,
+			height: target.videoHeight,
+			width: target.videoWidth,
+		})
+	}, [])
+
 	useEffect(() => {
 		const imageElement = imageElementRef.current
 		const videoElement = videoElementRef.current
 
-		if (!mediaItem.dimensions) {
+		if (!mediaItem.height) {
 			if (imageElement) {
 				imageElement.onload = () => {
+					imageElement.onload = null
+
 					updateMedia({
 						...mediaItem,
-						dimensions: {
-							height: imageElement.naturalHeight,
-							width: imageElement.naturalWidth,
-						},
+						height: imageElement.naturalHeight,
+						width: imageElement.naturalWidth,
 					})
 				}
 			} else if (videoElement) {
-				videoElement.addEventListener('loadedmetadata', () => {
-					updateMedia({
-						...mediaItem,
-						dimensions: {
-							height: videoElement.videoHeight,
-							width: videoElement.videoWidth,
-						},
-					})
-				})
+				videoElement.addEventListener('loadedmetadata', handleLoadedMetadata)
 			}
 		}
 	}, [mediaItem])
@@ -159,13 +163,13 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 						className={'shrink-0 w-xs'}
 						variant={'outline'}>
 						<ItemHeader>
-							{mediaItem.file.type.startsWith('video/') && (
+							{mediaItem.file!.type.startsWith('video/') && (
 								<MediaPlayer
 									className={'object-contain rounded-none size-full'}>
 									<MediaPlayerVideo ref={videoElementRef}>
 										<source
 											src={url}
-											type={mediaItem.file.type}
+											type={mediaItem.file!.type}
 										/>
 									</MediaPlayerVideo>
 									<MediaPlayerLoading />
@@ -190,9 +194,9 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 								</MediaPlayer>
 							)}
 
-							{mediaItem.file.type.startsWith('image/') && (
+							{mediaItem.file!.type.startsWith('image/') && (
 								<img
-									alt={mediaItem.file.name}
+									alt={mediaItem.file!.name}
 									className={'object-contain size-full'}
 									ref={imageElementRef}
 									src={url}
@@ -203,12 +207,12 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 						<ItemContent>
 							<DataList>
 								<DataListLabel>{'Filename'}</DataListLabel>
-								<DataListValue>{mediaItem.file.name}</DataListValue>
+								<DataListValue>{mediaItem.file!.name}</DataListValue>
 
 								<DataListLabel>{'Dimensions'}</DataListLabel>
 								<DataListValue>
-									{mediaItem.dimensions ? (
-										`${mediaItem.dimensions.width} × ${mediaItem.dimensions.height}`
+									{mediaItem.height ? (
+										`${mediaItem.width} × ${mediaItem.height}`
 									) : (
 										<span className={'text-muted-foreground'}>
 											{'Unavailable'}
@@ -218,7 +222,7 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 
 								<DataListLabel>{'Size'}</DataListLabel>
 								<DataListValue>
-									{formatBytes(mediaItem.file.size)}
+									{formatBytes(mediaItem.file!.size)}
 								</DataListValue>
 							</DataList>
 						</ItemContent>
@@ -265,14 +269,11 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 								</SelectTrigger>
 
 								<SelectContent>
-									{mediaItem.file.type.startsWith('video/') && (
+									{mediaItem.file!.type.startsWith('video/') && (
 										<>
-											<SelectItem value={'trailer'}>{'Trailer'}</SelectItem>
-
-											<SelectSeparator />
-
 											<SelectGroup>
 												<SelectLabel>{'Trailers'}</SelectLabel>
+												<SelectItem value={'trailer'}>{'Trailer'}</SelectItem>
 												<SelectItem value={'announcementTrailer'}>
 													{'Announcement Trailer'}
 												</SelectItem>
@@ -308,11 +309,43 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 										</>
 									)}
 
-									{mediaItem.file.type.startsWith('image/') && (
+									{mediaItem.file!.type.startsWith('image/') && (
 										<>
 											<SelectItem value={'screenshot'}>
 												{'Screenshot'}
 											</SelectItem>
+
+											<SelectSeparator />
+
+											<SelectGroup>
+												<SelectLabel>{'Covers'}</SelectLabel>
+												<SelectItem value={'cover'}>{'Cover'}</SelectItem>
+												<SelectItem value={'coverAlt'}>
+													{'Alternative Cover'}
+												</SelectItem>
+												<SelectItem value={'logoWhite'}>
+													{'Historical Cover'}
+												</SelectItem>
+												{mediaItem.width === mediaItem.height && (
+													<SelectItem value={'logoWhite'}>
+														{'Square Cover'}
+													</SelectItem>
+												)}
+											</SelectGroup>
+
+											<SelectSeparator />
+
+											<SelectGroup>
+												<SelectLabel>{'Artwork'}</SelectLabel>
+												<SelectItem value={'artwork'}>{'Artwork'}</SelectItem>
+												<SelectItem value={'keyArt'}>{'Key Art'}</SelectItem>
+												<SelectItem value={'keyArtLogo'}>
+													{'Key Art (with logo)'}
+												</SelectItem>
+												<SelectItem value={'conceptArt'}>
+													{'Concept Art'}
+												</SelectItem>
+											</SelectGroup>
 
 											<SelectSeparator />
 
@@ -332,13 +365,10 @@ export function DashboardCatalogNewGameMediaItemRenderer(
 											<SelectSeparator />
 
 											<SelectGroup>
-												<SelectLabel>{'Arwork'}</SelectLabel>
-												<SelectItem value={'keyArt'}>{'Key Art'}</SelectItem>
-												<SelectItem value={'keyArtLogo'}>
-													{'Key Art (with logo)'}
-												</SelectItem>
-												<SelectItem value={'conceptArt'}>
-													{'Concept Art'}
+												<SelectLabel>{'Other'}</SelectLabel>
+												<SelectItem value={'icon'}>{'Icon'}</SelectItem>
+												<SelectItem value={'infographic'}>
+													{'Infographic'}
 												</SelectItem>
 											</SelectGroup>
 										</>

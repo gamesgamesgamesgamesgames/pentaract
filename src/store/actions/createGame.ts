@@ -10,7 +10,10 @@ type Options = {
 	shouldPublish?: boolean
 }
 
-export async function createGame(gameDetails: UnpublishedGame, options: Options = {}) {
+export async function createGame(
+	gameDetails: UnpublishedGame,
+	options: Options = {},
+) {
 	const { shouldPublish } = options
 
 	const { quicksliceClient } = store.state
@@ -19,18 +22,23 @@ export async function createGame(gameDetails: UnpublishedGame, options: Options 
 		throw new Error('Cannot list games before logging in.')
 	}
 
-	const timestamp = (new Date()).toISOString()
+	const timestamp = new Date().toISOString()
 
-	const mutationVariables: UnpublishedGame & {
-		createdAt?: string,
+	const input: UnpublishedGame & {
+		createdAt?: string
 		publishedAt?: string
-	} = { 
+	} = {
 		...gameDetails,
 		createdAt: timestamp,
+		media: gameDetails.media.map((mediaItem) => {
+			const newMediaItem = { ...mediaItem }
+			delete newMediaItem.file
+			return newMediaItem
+		}),
 	}
 
 	if (shouldPublish) {
-		mutationVariables.publishedAt = timestamp
+		input.publishedAt = timestamp
 	}
 
 	const result = await quicksliceClient.mutate<{
@@ -39,37 +47,14 @@ export async function createGame(gameDetails: UnpublishedGame, options: Options 
 		}
 	}>(
 		`
-		mutation CreateGame (
-			$createdAt: DateTime!
-			$publishedAt: DateTime!
-			$applicationType: String!,
-			$genres: [String!],
-			$modes: [String!],
-			$name: String!,
-			$playerPerspectives: [String!],
-			$summary: String,
-			$themes: [String!],
-		) {
-			createGamesGamesgamesgamesgamesGame (
-				input:  {
-					createdAt: $createdAt
-					publishedAt: $publishedAt
-					applicationType: $applicationType
-					genres: $genres
-					modes: $modes
-					name: $name
-					playerPerspectives: $playerPerspectives
-					summary: $summary
-					themes: $themes
-				}
-			) {
+		mutation CreateGame ($input: GamesGamesgamesgamesgamesGameInput!) {
+			createGamesGamesgamesgamesgamesGame (input: $input) {
 				uri
 			}
 		}
 		`,
-		mutationVariables,
+		{ input },
 	)
 
-	console.log({result})
 	return result.createGamesGamesgamesgamesgamesGame.uri
 }

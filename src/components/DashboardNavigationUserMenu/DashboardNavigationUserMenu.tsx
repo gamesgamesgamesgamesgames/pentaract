@@ -63,8 +63,14 @@ export function DashboardNavigationUserMenu() {
 		<SidebarMenu>
 			<SidebarMenuItem>
 				{!user && (
-					<SidebarMenuButton>
-						<Link href={'/login'}>{'Login'}</Link>
+					<SidebarMenuButton
+						asChild
+						variant={'outline'}>
+						<Link
+							className={'justify-center'}
+							href={'/login'}>
+							{'Login'}
+						</Link>
 					</SidebarMenuButton>
 				)}
 

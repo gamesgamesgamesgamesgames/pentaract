@@ -13,7 +13,6 @@ import {
 import { useRouter } from 'next/navigation'
 
 // Local imports
-import { type AtUriString } from '@atproto/lex'
 import { createGame } from '@/store/actions/createGame'
 import { type GameRecord } from '@/typedefs/GameRecord'
 import {
@@ -32,6 +31,7 @@ import { parseATURI } from '@/helpers/parseATURI'
 import { type State } from '@/typedefs/State'
 import { type StepperStep } from '@/typedefs/StepperStep'
 import { SummaryError } from '@/context/DashboardCatalogNewGameContext/SummaryError'
+import { uploadBlob } from '@/store/actions/uploadBlob'
 
 // Types
 type Props = Readonly<PropsWithChildren>
@@ -74,6 +74,8 @@ export const DashboardCatalogNewGameContext = createContext<
 		steps: StepperStep[]
 		updateAllMedia: (files: File[]) => void
 		updateMedia: (mediaItem: MediaItem) => void
+		uploadProgress: null | number
+		uploadTotal: null | number
 	}
 >({
 	genres: new Set(),
@@ -111,6 +113,8 @@ export const DashboardCatalogNewGameContext = createContext<
 	steps: [],
 	updateAllMedia: () => {},
 	updateMedia: () => {},
+	uploadProgress: null,
+	uploadTotal: null,
 })
 
 export function DashboardCatalogNewGameContextProvider(props: Props) {
@@ -122,6 +126,8 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 
 	const [currentStepIndex, setCurrentStepIndex] = useState(0)
 	const [state, setState] = useState<State>('idle')
+	const [uploadProgress, setUploadProgress] = useState<null | number>(null)
+	const [uploadTotal, setUploadTotal] = useState<null | number>(null)
 
 	const [name, setName] = useState<GameRecord['name']>('')
 	const [media, setMedia] = useState<Map<File, MediaItem>>(new Map())
@@ -209,14 +215,38 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 		})
 	}, [])
 
+	const uploadMedia = useCallback(async () => {
+		const mediaArray = Array.from(media.values())
+
+		setUploadTotal(
+			mediaArray.reduce(
+				(accumulator, mediaItem) => accumulator + mediaItem.file!.size,
+				0,
+			),
+		)
+		setUploadProgress(0)
+
+		for (const mediaItem of mediaArray) {
+			const result = await uploadBlob(mediaItem.file!)
+			mediaItem.blob = result
+			setUploadProgress(
+				(previousState) => previousState! + mediaItem.file!.size,
+			)
+		}
+	}, [media])
+
 	const saveGame = useCallback(
-		(shouldPublish: boolean) => {
+		async (shouldPublish: boolean) => {
 			if (state === 'idle') {
 				setState('active')
-				createGame(
+
+				await uploadMedia()
+
+				const recordURI = await createGame(
 					{
 						applicationType,
 						genres: Array.from(genres || []),
+						media: Array.from(media.values()),
 						modes: Array.from(modes || []),
 						name,
 						playerPerspectives: Array.from(playerPerspectives || []),
@@ -225,15 +255,16 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 						themes: Array.from(themes || []),
 					},
 					{ shouldPublish },
-				).then((recordURI: AtUriString) => {
-					const { did, rkey } = parseATURI(recordURI)
-					router.push(`/dashboard/catalog/${did}/${rkey}/overview`)
-				})
+				)
+
+				const { did, rkey } = parseATURI(recordURI)
+				router.push(`/game/${did}/${rkey}`)
 			}
 		},
 		[
 			applicationType,
 			genres,
+			media,
 			modes,
 			name,
 			playerPerspectives,
@@ -241,6 +272,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			state,
 			summary,
 			themes,
+			uploadMedia,
 		],
 	)
 
@@ -251,12 +283,14 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			files.forEach((file) => {
 				if (!newState.has(file)) {
 					newState.set(file, {
+						blob: null,
 						description: '',
-						dimensions: null,
+						height: null,
 						file,
 						locale: null,
 						mediaType: null,
 						title: '',
+						width: null,
 					})
 				}
 			})
@@ -269,7 +303,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 		setMedia((previousState) => {
 			const newState = new Map(previousState)
 
-			newState.set(mediaItem.file, mediaItem)
+			newState.set(mediaItem.file!, mediaItem)
 
 			return newState
 		})
@@ -279,7 +313,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 		setMedia((previousState) => {
 			const newState = new Map(previousState)
 
-			newState.delete(mediaItem.file)
+			newState.delete(mediaItem.file!)
 
 			return newState
 		})
@@ -333,6 +367,8 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			steps,
 			summary,
 			themes,
+			uploadProgress,
+			uploadTotal,
 
 			addGenre,
 			addMode,
@@ -369,6 +405,8 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			steps,
 			summary,
 			themes,
+			uploadProgress,
+			uploadTotal,
 
 			addGenre,
 			addMode,
