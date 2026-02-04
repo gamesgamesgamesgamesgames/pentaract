@@ -14,6 +14,10 @@ type Props = Readonly<
 export function BoxArt(props: Props) {
 	const { className, gameRecord } = props
 
+	const mediaItem = gameRecord?.media?.find(
+		(item) => item.mediaType === 'cover',
+	)
+
 	return (
 		<div className={className}>
 			<Skeleton loading={!gameRecord}>
@@ -21,7 +25,7 @@ export function BoxArt(props: Props) {
 					<img
 						alt={`Box art for ${gameRecord?.name}`}
 						className={'relative h-full w-full object-cover'}
-						src={'https://placehold.co/200x300'}
+						src={mediaItem?.blob?.url ?? 'https://placehold.co/200x300'}
 					/>
 				</AspectRatio>
 			</Skeleton>

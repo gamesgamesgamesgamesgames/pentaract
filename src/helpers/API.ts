@@ -16,30 +16,40 @@ export async function getGame(/*client: QuicksliceClient, */ uri: string) {
 			},
 			body: JSON.stringify({
 				query: `
-          query GetGame ($uri: String!) {
-            gamesGamesgamesgamesgamesGame(
-              where: {
-                uri: {
-                  eq: $uri
-                }
-              }
-            ) {
-              edges {
-                node {
-                  uri
-                  did
-                  applicationType
-                  genres
-                  modes
-                  name
-                  playerPerspectives
-                  summary
-                  themes
-                }
-              }
-            }
-          }
-        `,
+					query GetGame ($uri: String!) {
+						gamesGamesgamesgamesgamesGame(
+							where: {
+								uri: {
+									eq: $uri
+								}
+							}
+						) {
+							edges {
+								node {
+									uri
+									did
+									applicationType
+									genres
+									media {
+										blob {
+											ref
+											url
+										}
+										description
+										locale
+										mediaType
+										title
+									}
+									modes
+									name
+									playerPerspectives
+									summary
+									themes
+								}
+							}
+						}
+					}
+				`,
 				variables: { uri },
 			}),
 		},
