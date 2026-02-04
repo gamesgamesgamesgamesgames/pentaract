@@ -85,7 +85,7 @@ export function Footer() {
 
 				{Boolean(publishErrors.length) && (
 					<HoverCardContent
-						className={'flex w-64 flex-col gap-0.5'}
+						className={'flex flex-col gap-0.5 w-md'}
 						side={'top'}>
 						{publishErrors.map((error, index) => (
 							<Item key={index}>

@@ -35,6 +35,17 @@ export async function createGame(
 			delete newMediaItem.file
 			return newMediaItem
 		}),
+		// Strip internal IDs from releases before sending to API
+		releases: gameDetails.releases?.map((release) => {
+			const { id: _releaseId, ...releaseWithoutId } = release as typeof release & { id?: string }
+			return {
+				...releaseWithoutId,
+				releaseDates: release.releaseDates?.map((rd) => {
+					const { id: _rdId, ...rdWithoutId } = rd as typeof rd & { id?: string }
+					return rdWithoutId
+				}),
+			}
+		}),
 	}
 
 	if (shouldPublish) {

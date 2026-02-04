@@ -19,6 +19,7 @@ import {
 	type Genre,
 	type Mode,
 	type PlayerPerspective,
+	type Release,
 	type Theme,
 } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
 import { GenreError } from '@/context/DashboardCatalogNewGameContext/GenreError'
@@ -27,6 +28,7 @@ import { ModeError } from '@/context/DashboardCatalogNewGameContext/ModeError'
 import { NameError } from '@/context/DashboardCatalogNewGameContext/NameError'
 import { NEW_GAME_STEPS } from '@/constants/NEW_GAME_STEPS'
 import { PlayerPerspectiveError } from '@/context/DashboardCatalogNewGameContext/PlayerPerspectiveError'
+import { ReleaseError } from '@/context/DashboardCatalogNewGameContext/ReleaseError'
 import { parseATURI } from '@/helpers/parseATURI'
 import { type State } from '@/typedefs/State'
 import { type StepperStep } from '@/typedefs/StepperStep'
@@ -66,9 +68,10 @@ export const DashboardCatalogNewGameContext = createContext<
 		removeTheme: (theme: Theme) => void
 		saveErrors: ReactNode[]
 		saveGameDraft: () => void
+		releases: Release[]
 		setApplicationType: (applicationType: GameRecord['applicationType']) => void
 		setName: (name: GameRecord['name']) => void
-		setReleaseDates: (releaseDates: GameRecord['releaseDates']) => void
+		setReleases: (releases: Release[]) => void
 		setSummary: (summary: GameRecord['summary']) => void
 		state: State
 		steps: StepperStep[]
@@ -102,12 +105,13 @@ export const DashboardCatalogNewGameContext = createContext<
 	removeMedia: () => {},
 	removeMode: () => {},
 	removePlayerPerspective: () => {},
+	releases: [],
 	removeTheme: () => {},
 	saveErrors: [],
 	saveGameDraft: () => {},
 	setApplicationType: () => {},
 	setName: () => {},
-	setReleaseDates: () => {},
+	setReleases: () => {},
 	setSummary: () => {},
 	state: 'idle',
 	steps: [],
@@ -135,9 +139,19 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 	const [modes, setModes] = useState<Set<Mode>>(new Set())
 	const [themes, setThemes] = useState<Set<Theme>>(new Set())
 	const [summary, setSummary] = useState<GameRecord['summary']>('')
-	const [releaseDates, setReleaseDates] = useState<GameRecord['releaseDates']>(
-		[],
-	)
+	const [releases, setReleases] = useState<Release[]>([
+		{
+			platform: '',
+			releaseDates: [
+				{
+					releasedAt: '',
+					releasedAtFormat: 'TBD',
+					region: '',
+					status: 'release',
+				},
+			],
+		},
+	])
 	const [applicationType, setApplicationType] = useState<
 		GameRecord['applicationType']
 	>('games.gamesgamesgamesgames.applicationType#game')
@@ -250,7 +264,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 						modes: Array.from(modes || []),
 						name,
 						playerPerspectives: Array.from(playerPerspectives || []),
-						releaseDates,
+						releases,
 						summary,
 						themes: Array.from(themes || []),
 					},
@@ -268,7 +282,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			modes,
 			name,
 			playerPerspectives,
-			releaseDates,
+			releases,
 			state,
 			summary,
 			themes,
@@ -341,6 +355,15 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 	const publishGame = useCallback(() => saveGame(true), [saveGame])
 	const saveGameDraft = useCallback(() => saveGame(false), [saveGame])
 
+	// Check if there's at least one valid release with a complete release date
+	const hasValidRelease = releases.some(
+		(release) =>
+			release.platform &&
+			release.releaseDates?.some(
+				(rd) => rd.region && rd.status,
+			),
+	)
+
 	const providerValue = useMemo(
 		() => ({
 			currentStep: steps[currentStepIndex],
@@ -352,6 +375,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 				genres!.size ? null : <GenreError />,
 				modes!.size ? null : <ModeError />,
 				playerPerspectives!.size ? null : <PlayerPerspectiveError />,
+				hasValidRelease ? null : <ReleaseError />,
 			].filter(Boolean) as ReactNode[],
 			saveErrors: [name ? null : <NameError />].filter(Boolean) as ReactNode[],
 
@@ -362,7 +386,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			modes,
 			name,
 			playerPerspectives,
-			releaseDates,
+			releases,
 			state,
 			steps,
 			summary,
@@ -387,7 +411,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			setApplicationType,
 			setCurrentStepIndex,
 			setName,
-			setReleaseDates,
+			setReleases,
 			setSummary,
 			updateAllMedia,
 			updateMedia,
@@ -400,7 +424,7 @@ export function DashboardCatalogNewGameContextProvider(props: Props) {
 			modes,
 			name,
 			playerPerspectives,
-			releaseDates,
+			releases,
 			state,
 			steps,
 			summary,
