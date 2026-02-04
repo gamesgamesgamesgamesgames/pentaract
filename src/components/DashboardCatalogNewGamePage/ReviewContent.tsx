@@ -15,7 +15,7 @@ import { GAME_THEMES } from '@/constants/GAME_THEMES'
 import { Scroller } from '@/components/ui/scroller'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGameReview() {
+export function ReviewContent() {
 	const {
 		applicationType,
 		genres,

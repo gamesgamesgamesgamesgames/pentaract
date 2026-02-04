@@ -12,7 +12,7 @@ import { Scroller } from '@/components/ui/scroller'
 import { SummaryField } from '@/components/SummaryField/SummaryField'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGameGeneral() {
+export function GeneralContent() {
 	const {
 		applicationType,
 		name,

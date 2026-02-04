@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 // Local imports
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGamePageContent() {
+export function ContentWrapper() {
 	const { currentStepIndex, steps } = useDashboardCatalogNewGameContext()
 
 	const contentElements = useMemo(

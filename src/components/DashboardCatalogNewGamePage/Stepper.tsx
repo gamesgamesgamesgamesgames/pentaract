@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/item'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGamePageStepper() {
+export function Stepper() {
 	const { currentStepIndex, goToStepIndex, steps } =
 		useDashboardCatalogNewGameContext()
 

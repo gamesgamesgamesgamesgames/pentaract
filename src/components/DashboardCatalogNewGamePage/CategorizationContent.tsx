@@ -17,7 +17,7 @@ import { Scroller } from '@/components/ui/scroller'
 import { ThemesField } from '@/components/ThemesField/ThemesField'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGameCategorization() {
+export function CategorizationContent() {
 	const {
 		addGenre,
 		addMode,

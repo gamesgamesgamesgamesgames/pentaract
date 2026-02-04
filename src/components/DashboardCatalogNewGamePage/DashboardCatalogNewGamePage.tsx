@@ -3,10 +3,10 @@
 // Local imports
 import { Container } from '@/components/Container/Container'
 import { DashboardCatalogNewGameContextProvider } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
-import { DashboardCatalogNewGamePageContent } from '@/components/DashboardCatalogNewGamePageContent/DashboardCatalogNewGamePageContent'
+import { ContentWrapper } from '@/components/DashboardCatalogNewGamePage/ContentWrapper'
 import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader'
-import { DashboardCatalogNewGameFooter } from '../DashboardCatalogNewGameFooter/DashboardCatalogNewGameFooter'
-import { DashboardCatalogNewGamePageStepper } from '../DashboardCatalogNewGamePageStepper/DashboardCatalogNewGamePageStepper'
+import { Footer } from '@/components/DashboardCatalogNewGamePage/Footer'
+import { Stepper } from '@/components/DashboardCatalogNewGamePage/Stepper'
 
 // Constants
 const BREADCRUMBS = [
@@ -27,12 +27,12 @@ export function DashboardCatalogNewGamePage() {
 
 			<Container isScrollable={false}>
 				<div className={'items-stretch flex gap-4 h-full overflow-hidden'}>
-					<DashboardCatalogNewGamePageStepper />
+					<Stepper />
 
 					<div className={'flex flex-col grow justify-stretch w-full'}>
-						<DashboardCatalogNewGamePageContent />
+						<ContentWrapper />
 
-						<DashboardCatalogNewGameFooter />
+						<Footer />
 					</div>
 				</div>
 			</Container>

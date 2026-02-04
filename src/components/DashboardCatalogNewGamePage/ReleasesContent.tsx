@@ -4,7 +4,7 @@
 import { Scroller } from '@/components/ui/scroller'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGameReleases() {
+export function ReleasesContent() {
 	const { state } = useDashboardCatalogNewGameContext()
 
 	const isDisabled = state === 'active'

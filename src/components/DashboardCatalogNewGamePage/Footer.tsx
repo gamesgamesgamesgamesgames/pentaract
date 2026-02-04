@@ -23,7 +23,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 import { useCallback, useMemo, useState } from 'react'
 
-export function DashboardCatalogNewGameFooter() {
+export function Footer() {
 	const [isPublishing, setIsPublishing] = useState(false)
 	const [isSaving, setIsSaving] = useState(false)
 

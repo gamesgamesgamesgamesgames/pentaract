@@ -1,30 +1,30 @@
 // Local imports
-import { DashboardCatalogNewGameCategorization } from '@/components/DashboardCatalogNewGameCategorization/DashboardCatalogNewGameCategorization'
-import { DashboardCatalogNewGameGeneral } from '@/components/DashboardCatalogNewGameGeneral/DashboardCatalogNewGameGeneral'
-import { DashboardCatalogNewGameMedia } from '@/components/DashboardCatalogNewGamePage/DashboardCatalogNewGameMedia'
-import { DashboardCatalogNewGameReleases } from '@/components/DashboardCatalogNewGameReleases/DashboardCatalogNewGameReleases'
-import { DashboardCatalogNewGameReview } from '@/components/DashboardCatalogNewGameReview/DashboardCatalogNewGameReview'
+import { CategorizationContent } from '@/components/DashboardCatalogNewGamePage/CategorizationContent'
+import { GeneralContent } from '@/components/DashboardCatalogNewGamePage/GeneralContent'
+import { MediaContent } from '@/components/DashboardCatalogNewGamePage/MediaContent'
+import { ReleasesContent } from '@/components/DashboardCatalogNewGamePage/ReleasesContent'
+import { ReviewContent } from '@/components/DashboardCatalogNewGamePage/ReviewContent'
 import { type StepperStep } from '@/typedefs/StepperStep'
 
 export const NEW_GAME_STEPS: StepperStep[] = [
 	{
 		title: 'General',
-		component: DashboardCatalogNewGameGeneral,
+		component: GeneralContent,
 	},
 	{
 		title: 'Categorization',
-		component: DashboardCatalogNewGameCategorization,
+		component: CategorizationContent,
 	},
 	{
 		title: 'Media',
-		component: DashboardCatalogNewGameMedia,
+		component: MediaContent,
 	},
 	{
 		title: 'Releases',
-		component: DashboardCatalogNewGameReleases,
+		component: ReleasesContent,
 	},
 	{
 		title: 'Review',
-		component: DashboardCatalogNewGameReview,
+		component: ReviewContent,
 	},
 ]

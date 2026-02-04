@@ -9,13 +9,13 @@ import {
 	FileUploadDropzone,
 	FileUploadTrigger,
 } from '@/components/ui/file-upload'
-import { DashboardCatalogNewGameMediaItemRenderer } from '@/components/DashboardCatalogNewGamePage/DashboardCatalogNewGameMediaItemRenderer'
+import { MediaItemRenderer } from '@/components/DashboardCatalogNewGamePage/MediaItemRenderer'
 import { Scroller } from '@/components/ui/scroller'
 import { toast } from 'sonner'
 import { useCallback, useMemo } from 'react'
 import { useDashboardCatalogNewGameContext } from '@/context/DashboardCatalogNewGameContext/DashboardCatalogNewGameContext'
 
-export function DashboardCatalogNewGameMedia() {
+export function MediaContent() {
 	const { media, updateAllMedia } = useDashboardCatalogNewGameContext()
 
 	const onFileReject = useCallback((file: File, message: string) => {
@@ -26,7 +26,7 @@ export function DashboardCatalogNewGameMedia() {
 
 	const mediaElements = useMemo(() => {
 		return Array.from(media.values()).map((mediaItem, index) => (
-			<DashboardCatalogNewGameMediaItemRenderer
+			<MediaItemRenderer
 				key={index}
 				mediaItem={mediaItem}
 			/>

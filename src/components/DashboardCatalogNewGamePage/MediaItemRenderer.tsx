@@ -56,9 +56,7 @@ type ItemRendererProps = Readonly<{
 	mediaItem: MediaItem
 }>
 
-export function DashboardCatalogNewGameMediaItemRenderer(
-	props: ItemRendererProps,
-) {
+export function MediaItemRenderer(props: ItemRendererProps) {
 	const { mediaItem } = props
 
 	const { removeMedia, state, updateMedia } =
