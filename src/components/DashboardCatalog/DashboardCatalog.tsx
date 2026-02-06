@@ -10,7 +10,7 @@ import { BoxArt } from '@/components/BoxArt/BoxArt'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/Container/Container'
 import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader'
-import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faEye, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { listGames } from '@/store/actions/listGames'
 import { parseATURI } from '@/helpers/parseATURI'
@@ -102,6 +102,14 @@ export function DashboardCatalog() {
 									'absolute inset-0 opacity-0 group-hover:opacity-100 transition-[opacity]'
 								}>
 								<div className={'absolute flex gap-2 right-2 top-2'}>
+									<Button
+										asChild
+										size={'icon'}>
+										<Link href={`/game/${did}/${rkey}`}>
+											<FontAwesomeIcon icon={faEye} />
+										</Link>
+									</Button>
+
 									<Button
 										asChild
 										size={'icon'}>
