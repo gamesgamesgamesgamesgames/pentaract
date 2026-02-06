@@ -43,6 +43,7 @@ export async function getGame(/*client: QuicksliceClient, */ uri: string) {
 									modes
 									name
 									playerPerspectives
+									releases
 									summary
 									themes
 								}
