@@ -16,8 +16,11 @@ import { useParams, useRouter } from 'next/navigation'
 
 // Local imports
 import { createGame } from '@/store/actions/createGame'
+import { type DID } from '@/typedefs/DID'
 import { getGame } from '@/store/actions/getGame'
+import { isDID } from '@/helpers/isDID'
 import { putGame } from '@/store/actions/putGame'
+import { resolveHandle } from '@/helpers/API'
 import { type GameRecord } from '@/typedefs/GameRecord'
 import {
 	type Genre,
@@ -45,7 +48,7 @@ type Props = Readonly<PropsWithChildren>
 
 export const DashboardCatalogEditGameContext = createContext<
 	Partial<
-		Omit<GameRecord, 'genres' | 'modes' | 'playerPerspectives' | 'themes'>
+		Omit<GameRecord, 'genres' | 'media' | 'modes' | 'playerPerspectives' | 'themes'>
 	> & {
 		genres: Set<Genre>
 		media: MediaItem[]
@@ -139,19 +142,37 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 	// slug = [did, rkey] → edit mode
 	const slug = params?.slug ?? []
 	const gameRkey = slug.length === 2 ? decodeURIComponent(slug[1]) : null
-	const gameDid = slug.length === 2 ? decodeURIComponent(slug[0]) : null
-	const gameURI: AtUriString | null = gameRkey && gameDid
-		? `at://${gameDid}/games.gamesgamesgamesgames.game/${gameRkey}` as AtUriString
-		: null
+	const rawDIDOrHandle = slug.length === 2 ? decodeURIComponent(slug[0]) : null
 	const isEditMode = Boolean(gameRkey)
+
+	const [gameDID, setGameDID] = useState<DID | null>(
+		rawDIDOrHandle && isDID(rawDIDOrHandle) ? rawDIDOrHandle : null,
+	)
 
 	const [steps] = useState(EDIT_GAME_STEPS)
 
 	const [currentStepIndex, setCurrentStepIndex] = useState(0)
 	const [state, setState] = useState<State>(isEditMode ? 'active' : 'idle')
+
+	useEffect(() => {
+		if (!rawDIDOrHandle || isDID(rawDIDOrHandle)) return
+
+		resolveHandle(rawDIDOrHandle).then((resolved) => {
+			if (resolved) {
+				setGameDID(resolved)
+			} else {
+				setState('error')
+			}
+		})
+	}, [rawDIDOrHandle])
+
+	const gameURI: AtUriString | null =
+		gameRkey && gameDID
+			? (`at://${gameDID}/games.gamesgamesgamesgames.game/${gameRkey}` as AtUriString)
+			: null
 	const [uploadProgress, setUploadProgress] = useState<null | number>(null)
 	const [uploadTotal, setUploadTotal] = useState<null | number>(null)
-	const [createdAt, setCreatedAt] = useState<string | null>(null)
+	const [createdAt, setCreatedAt] = useState<GameRecord['createdAt'] | null>(null)
 
 	const [name, setName] = useState<GameRecord['name']>('')
 	const [media, setMedia] = useState<MediaItem[]>([])
@@ -194,7 +215,8 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 			setName(record.name ?? '')
 			setSummary(record.summary ?? '')
 			setApplicationType(
-				record.applicationType ?? 'games.gamesgamesgamesgames.applicationType#game',
+				record.applicationType ??
+					'games.gamesgamesgamesgames.applicationType#game',
 			)
 			setGenres(new Set((record.genres as Genre[]) ?? []))
 			setModes(new Set((record.modes as Mode[]) ?? []))
@@ -312,7 +334,7 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 
 		for (const mediaItem of newMediaItems) {
 			const result = await uploadBlob(mediaItem.file!)
-			mediaItem.blob = result
+			mediaItem.blob = result as MediaItem['blob']
 			setUploadProgress(
 				(previousState) => previousState! + mediaItem.file!.size,
 			)
@@ -342,7 +364,7 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 				if (gameURI) {
 					// Edit mode
 					await putGame(gameURI, gameData, { shouldPublish })
-					router.push(`/game/${gameDid}/${gameRkey}`)
+					router.push(`/game/${gameDID}/${gameRkey}`)
 				} else {
 					// Create mode
 					const recordURI = await createGame(gameData, { shouldPublish })
@@ -354,7 +376,7 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 		[
 			applicationType,
 			createdAt,
-			gameDid,
+			gameDID,
 			gameRkey,
 			gameURI,
 			genres,
@@ -436,9 +458,7 @@ export function DashboardCatalogEditGameContextProvider(props: Props) {
 	const hasValidRelease = releases.some(
 		(release) =>
 			release.platform &&
-			release.releaseDates?.some(
-				(rd) => rd.region && rd.status,
-			),
+			release.releaseDates?.some((rd) => rd.region && rd.status),
 	)
 
 	const providerValue = useMemo(

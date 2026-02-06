@@ -4,7 +4,7 @@ import { type BCP47LanguageCode } from '@/typedefs/BCP47LanguageCode'
 import { type Cid } from '@atproto/lex'
 import { type MediaType } from '@/typedefs/MediaType'
 
-export type MediaItem = MediaItemDef & {
+export type MediaItem = Omit<MediaItemDef, 'blob' | 'description' | 'height' | 'locale' | 'mediaType' | 'title' | 'width'> & {
 	blob: null | {
 		ref: Cid
 		mimeType: string

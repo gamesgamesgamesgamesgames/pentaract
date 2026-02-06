@@ -1,3 +1,6 @@
+// Module imports
+import { notFound } from 'next/navigation'
+
 // Local imports
 import * as API from '@/helpers/API'
 import { About } from '@/components/GamePage/About'
@@ -5,8 +8,8 @@ import { Achievements } from '@/components/GamePage/Achievements'
 import { type AtUriString } from '@atproto/lex'
 import { Container } from '@/components/Container/Container'
 import { Credits } from './Credits'
-import { type DID } from '@/typedefs/DID'
 import { GameHeader } from '@/components/GamePage/GameHeader'
+import { isDID } from '@/helpers/isDID'
 import { RelatedContent } from '@/components/GamePage/RelatedContent'
 import { ReleaseTimeline } from '@/components/GamePage/ReleaseTimeline'
 import { Media } from './Media'
@@ -17,8 +20,19 @@ type Props = Readonly<PageProps<'/game/[did]/[rkey]'>>
 export async function GamePage(props: Props) {
 	const params = await props.params
 
-	const did = decodeURIComponent(params.did) as DID
+	const didOrHandle = decodeURIComponent(params.did)
 	const rkey = decodeURIComponent(params.rkey)
+
+	let did
+	if (isDID(didOrHandle)) {
+		did = didOrHandle
+	} else {
+		did = await API.resolveHandle(didOrHandle)
+		if (!did) {
+			notFound()
+		}
+	}
+
 	const gameURI: AtUriString = `at://${did}/games.gamesgamesgamesgames.game/${rkey}`
 
 	const gameRecord = await API.getGame(gameURI)
