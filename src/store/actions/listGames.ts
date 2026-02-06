@@ -45,6 +45,16 @@ export async function listGames(options: Options = {}) {
 					node {
 						uri
 						did
+						media {
+							blob {
+								mimeType
+								ref
+								url
+							}
+							description
+							mediaType
+							title
+						}
 						name
 					}
 				}
