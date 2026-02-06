@@ -2,10 +2,11 @@
 import { type AtUriString, type BlobRef } from '@atproto/lex'
 
 // Local imports
-import type * as GameLexicon from '@/helpers/lexicons/games/gamesgamesgamesgames/game'
+import { Main as GameLexicon } from '@/helpers/lexicons/games/gamesgamesgamesgames/game.defs'
+import { MediaItem } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
 
-export type GameRecord = Omit<GameLexicon.Main, 'media'> & {
-	media?: (Omit<GameLexicon.MediaItem, 'blob'> & {
+export type GameRecord = Omit<GameLexicon, 'media'> & {
+	media?: (Omit<MediaItem, 'blob'> & {
 		blob?: BlobRef & { url: string }
 	})[]
 	name: string

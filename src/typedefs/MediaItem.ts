@@ -1,5 +1,5 @@
 // Local imports
-import { type MediaItem as MediaItemDef } from '@/helpers/lexicons/games/gamesgamesgamesgames/game.defs'
+import { type MediaItem as MediaItemDef } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
 import { type BCP47LanguageCode } from '@/typedefs/BCP47LanguageCode'
 import { type Cid } from '@atproto/lex'
 import { type MediaType } from '@/typedefs/MediaType'
