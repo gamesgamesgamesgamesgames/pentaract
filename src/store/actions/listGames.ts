@@ -1,5 +1,5 @@
 // Module imports
-import { type QueryOptions } from 'quickslice-client-js'
+import { type QueryOptions } from '@gamesgamesgamesgamesgames/quickslice-client-js'
 
 // Local imports
 import { type GameRecord } from '@/typedefs/GameRecord'

@@ -1,5 +1,5 @@
 // Module imports
-import { type QuicksliceClient } from 'quickslice-client-js'
+import { type QuicksliceClient } from '@gamesgamesgamesgamesgames/quickslice-client-js'
 import { type Game } from '@/typedefs/Game'
 
 // Local imports

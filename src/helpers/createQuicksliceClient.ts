@@ -1,4 +1,4 @@
-import { createQuicksliceClient as createClient } from 'quickslice-client-js'
+import { createQuicksliceClient as createClient } from '@gamesgamesgamesgamesgames/quickslice-client-js'
 
 export async function createQuicksliceClient() {
 	return createClient({
