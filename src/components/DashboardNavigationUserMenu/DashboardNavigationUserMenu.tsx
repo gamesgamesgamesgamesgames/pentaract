@@ -34,6 +34,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { logout } from '@/store/actions/logout'
 import {
 	SidebarMenu,
 	SidebarMenuButton,
@@ -46,15 +47,11 @@ import { useCallback } from 'react'
 export function DashboardNavigationUserMenu() {
 	const { setTheme, theme } = useTheme()
 
-	const { quicksliceClient, user } = useStore(store)
+	const { user } = useStore(store)
 
 	const { isMobile } = useSidebar()
 
-	const handleLogoutClick = useCallback(() => {
-		if (quicksliceClient) {
-			quicksliceClient.logout()
-		}
-	}, [quicksliceClient])
+	const handleLogoutClick = useCallback(() => logout(), [])
 
 	const displayName =
 		user?.displayName ?? user?.handle ?? user?.did ?? 'Unknown'

@@ -13,6 +13,7 @@ import {
 	EmptyTitle,
 } from '@/components/ui/empty'
 import { Spinner } from '@/components/ui/spinner'
+import { login } from '@/store/actions/login'
 import { store } from '@/store/store'
 
 export function CallbackPage() {
@@ -22,9 +23,7 @@ export function CallbackPage() {
 
 	useEffect(() => {
 		if (quicksliceClient && window.location.search.includes('code=')) {
-			quicksliceClient
-				.handleRedirectCallback()
-				.then(() => router.replace('/dashboard'))
+			login().then(() => router.replace('/dashboard'))
 		}
 	}, [quicksliceClient])
 
