@@ -6,7 +6,7 @@ import { subscribeToDeletes } from '@/store/actions/subscribeToDeletes'
 
 export async function subscribe() {
 	const client = createClient({
-		url: `ws://${process.env.NEXT_PUBLIC_QUICKSLICE_SERVER_DOMAIN!}/graphql`,
+		url: `wss://${process.env.NEXT_PUBLIC_QUICKSLICE_SERVER_DOMAIN!}/graphql`,
 	})
 
 	Promise.all([

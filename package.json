@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --experimental-https",
     "build": "next build",
     "build-lexicons": "lex build --lexicons ./src/lexicons --out ./src/helpers/lexicons --clear",
     "update-lexicons": "lex install --lexicons ./src/lexicons --update",
