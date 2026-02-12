@@ -4,7 +4,6 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useCallback, useState } from 'react'
-import { useStore } from 'statery'
 
 // Local imports
 import { Button } from '@/components/ui/button'
@@ -36,24 +35,18 @@ import {
 import { Link } from '@/components/Link/Link'
 import { Spinner } from '@/components/ui/spinner'
 import { type State } from '@/typedefs/State'
-import { store } from '@/store/store'
+import { loginWithRedirect } from '@/helpers/oauth'
 
 export function LoginPage() {
 	const [state, setSaveState] = useState<State>('idle')
 
-	const { quicksliceClient } = useStore(store)
-
 	const handleSubmit = useCallback(
 		(formData: FormData) => {
-			if (!quicksliceClient) {
-				return
-			}
 			setSaveState('active')
-			quicksliceClient
-				.loginWithRedirect(Object.fromEntries(formData.entries()))
-				.then(() => setSaveState('idle'))
+			const handle = formData.get('handle') as string
+			loginWithRedirect(handle || undefined)
 		},
-		[quicksliceClient],
+		[],
 	)
 
 	return (
@@ -96,9 +89,6 @@ export function LoginPage() {
 											<ItemContent>
 												<CollapsibleTrigger asChild>
 													<ItemTitle className={'group w-full'}>
-														{/* <Button
-													className={'group w-full'}
-													variant={'ghost'}> */}
 														{'What is an Atmosphere account?'}
 														<FontAwesomeIcon
 															className={

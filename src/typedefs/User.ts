@@ -1,9 +1,7 @@
-// Module imports
-import { type User as QuicksliceUser } from '@gamesgamesgamesgamesgames/quickslice-client-js'
-
-export type User = QuicksliceUser & {
-	description?: string
-	displayName?: string
+export type User = {
+	did: string
 	handle?: string
+	displayName?: string
+	description?: string
 	avatarURL?: string
 }

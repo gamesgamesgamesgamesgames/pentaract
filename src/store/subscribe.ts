@@ -1,17 +1,3 @@
-// Module imports
-import { createClient } from 'graphql-ws'
-import { subscribeToCreates } from '@/store/actions/subscribeToCreates'
-import { subscribeToUpdates } from '@/store/actions/subscribeToUpdates'
-import { subscribeToDeletes } from '@/store/actions/subscribeToDeletes'
-
-export async function subscribe() {
-	const client = createClient({
-		url: `wss://${process.env.NEXT_PUBLIC_QUICKSLICE_SERVER_DOMAIN!}/graphql`,
-	})
-
-	Promise.all([
-		subscribeToCreates(client),
-		subscribeToDeletes(client),
-		subscribeToUpdates(client),
-	])
+export function subscribe() {
+	console.warn('[pentaract] subscribe is stubbed — HappyView data API not yet available')
 }

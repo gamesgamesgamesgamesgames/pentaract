@@ -1,14 +1,8 @@
 // Local imports
 import { clearAuthCookie } from '@/helpers/clearAuthCookie'
-import { store } from '@/store/store'
+import { logout as oauthLogout } from '@/helpers/oauth'
 
 export function logout() {
-	const { quicksliceClient } = store.state
-
-	if (!quicksliceClient) {
-		throw new Error('Cannot logout before client is initialized.')
-	}
-
 	clearAuthCookie()
-	quicksliceClient.logout()
+	oauthLogout()
 }

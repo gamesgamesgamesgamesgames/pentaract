@@ -1,121 +1,34 @@
 // Local imports
 import { type DID } from '@/typedefs/DID'
 import { type GameRecord } from '@/typedefs/GameRecord'
-
-// Types
-type QueryOptions = Readonly<{
-	query: string
-	variables: Record<string, unknown>
-}>
+import { getAccessToken } from '@/helpers/oauth'
 
 // Constants
-const API_URL = `https://${process.env.NEXT_PUBLIC_QUICKSLICE_SERVER_DOMAIN!}/graphql`
+const API_URL = process.env.NEXT_PUBLIC_HAPPYVIEW_URL!
 
-export async function queryAPI(options: QueryOptions) {
-	const { query, variables } = options
+export async function queryAPI(path: string, options: RequestInit = {}) {
+	const token = getAccessToken()
+	const headers: Record<string, string> = {
+		'Content-Type': 'application/json',
+		...(options.headers as Record<string, string>),
+	}
 
-	return fetch(API_URL, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query,
-			variables,
-		}),
+	if (token) {
+		headers['Authorization'] = `Bearer ${token}`
+	}
+
+	return fetch(`${API_URL}${path}`, {
+		...options,
+		headers,
 	})
 }
 
-export async function queryJSONAPI<Shape>(options: QueryOptions) {
-	const response = await queryAPI(options)
-
-	return response.json() as Shape
+export async function getGame(_uri: string): Promise<GameRecord | undefined> {
+	console.warn('[pentaract] API.getGame is stubbed — HappyView data API not yet available')
+	return undefined
 }
 
-export async function getGame(/*client: QuicksliceClient, */ uri: string) {
-	const { data } = await queryJSONAPI<{
-		data: {
-			gamesGamesgamesgamesgamesGame: {
-				edges: {
-					node: GameRecord
-				}[]
-			}
-		}
-	}>({
-		query: `
-			query GetGame ($uri: String!) {
-				gamesGamesgamesgamesgamesGame(
-					where: {
-						uri: {
-							eq: $uri
-						}
-					}
-				) {
-					edges {
-						node {
-							uri
-							did
-							applicationType
-							genres
-							media {
-								blob {
-									ref
-									url
-								}
-								description
-								locale
-								mediaType
-								title
-							}
-							modes
-							name
-							playerPerspectives
-							releases
-							summary
-							themes
-						}
-					}
-				}
-			}
-		`,
-		variables: { uri },
-	})
-
-	return data.gamesGamesgamesgamesgamesGame.edges[0]?.node
-}
-
-export async function resolveHandle(handle: string): Promise<DID | null> {
-	const { data } = await queryJSONAPI<{
-		data: {
-			appBskyActorProfile: {
-				edges: {
-					node: {
-						did: string
-					}
-				}[]
-			}
-		}
-	}>({
-		query: `
-			query ResolveHandle ($handle: String!) {
-				appBskyActorProfile(
-					where: {
-						actorHandle: {
-							eq: $handle
-						}
-					}
-					first: 1
-				) {
-					edges {
-						node {
-							did
-						}
-					}
-				}
-			}
-		`,
-		variables: { handle },
-	})
-
-	return (data.appBskyActorProfile.edges[0]?.node.did as DID) ?? null
+export async function resolveHandle(_handle: string): Promise<DID | null> {
+	console.warn('[pentaract] API.resolveHandle is stubbed — HappyView data API not yet available')
+	return null
 }

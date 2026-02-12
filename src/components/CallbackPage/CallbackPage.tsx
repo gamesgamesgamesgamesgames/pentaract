@@ -3,7 +3,6 @@
 // Module imports
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useStore } from 'statery'
 
 // Local imports
 import {
@@ -14,18 +13,15 @@ import {
 } from '@/components/ui/empty'
 import { Spinner } from '@/components/ui/spinner'
 import { login } from '@/store/actions/login'
-import { store } from '@/store/store'
 
 export function CallbackPage() {
 	const router = useRouter()
 
-	const { quicksliceClient } = useStore(store)
-
 	useEffect(() => {
-		if (quicksliceClient && window.location.search.includes('code=')) {
+		if (window.location.search.includes('code=')) {
 			login().then(() => router.replace('/dashboard'))
 		}
-	}, [quicksliceClient])
+	}, [router])
 
 	return (
 		<div

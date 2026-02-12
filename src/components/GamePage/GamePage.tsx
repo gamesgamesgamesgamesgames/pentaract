@@ -37,6 +37,10 @@ export async function GamePage(props: Props) {
 
 	const gameRecord = await API.getGame(gameURI)
 
+	if (!gameRecord) {
+		notFound()
+	}
+
 	return (
 		<Container>
 			<div className={'gap-4 grid grid-cols-3 max-w-full'}>

@@ -1,5 +1,5 @@
 // Local imports
-import { createQuicksliceClient } from '@/helpers/createQuicksliceClient'
+import { getStoredTokens } from '@/helpers/oauth'
 import { getUserProfile } from '@/store/actions/getUserProfile'
 import { syncAuthCookie } from '@/store/actions/login'
 import { store } from '@/store/store'
@@ -10,10 +10,13 @@ export async function initialize() {
 		return
 	}
 
-	const quicksliceClient = await createQuicksliceClient()
-	store.set(() => ({ quicksliceClient }))
+	const tokens = getStoredTokens()
 
-	const isAuthed = await syncAuthCookie()
+	if (tokens) {
+		store.set(() => ({ authTokens: tokens }))
+	}
+
+	const isAuthed = syncAuthCookie()
 
 	if (isAuthed) {
 		await getUserProfile()
