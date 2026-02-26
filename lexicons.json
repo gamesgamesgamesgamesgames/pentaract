@@ -28,15 +28,15 @@
     },
     "games.gamesgamesgamesgames.actor.createProfile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.actor.createProfile",
-      "cid": "bafyreihntnavyrxse6i365uqvr5voxaye4jdif64no4ho6tibjk3kjwtg4"
+      "cid": "bafyreihrtskuv2xfd3hrynb5r3ayqlqdkinturxdmyvrgfjhctyuyluxm4"
     },
     "games.gamesgamesgamesgames.actor.getProfile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.actor.getProfile",
-      "cid": "bafyreihrj64f7cfm2vctgzybvcxp3gtadfv3ctd6ys3cbl4f2imuxoysgi"
+      "cid": "bafyreiaocyj7mxxdefvazzhuiypttmbmgdlhg7itfcm4zcumopnnqbwpmu"
     },
     "games.gamesgamesgamesgames.actor.profile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.actor.profile",
-      "cid": "bafyreicxe44i2abfc7cwbby6acmfxriw4woifo3iv6wqsylj3eb37i5kle"
+      "cid": "bafyreiezhholnqjeb5gtdh7ujm5yvz7ciaastop6mi7wd2ncpl3gosmwxq"
     },
     "games.gamesgamesgamesgames.applicationType": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.applicationType",
@@ -44,24 +44,27 @@
     },
     "games.gamesgamesgamesgames.defs": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.defs",
-      "cid": "bafyreihutjimstss4fxxgrpmkb2dewupi4njhunljwxmvvojcwdqy2m7ka"
+      "cid": "bafyreigdcweepjdptmcqzlnqmfcr35cu5md263amnsovhrowz4bctasdua"
     },
     "games.gamesgamesgamesgames.game": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.game",
       "cid": "bafyreie2o6xq6saixb2jylwkgvfzaifeaqi77etevqm2ui346lrwqvisqa"
     },
-    "games.gamesgamesgamesgames.getProfile": {},
+    "games.gamesgamesgamesgames.getProfile": {
+      "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.getProfile",
+      "cid": "bafyreihaffjdit5bbdo5efncuqyrnohvw7nw43n4c7mv4kyedim4zqzzwi"
+    },
     "games.gamesgamesgamesgames.org.createProfile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.org.createProfile",
-      "cid": "bafyreidyb7pqsttlysveb27wj54ejhsvn5hli5s6odonsuqm3sdnewe43m"
+      "cid": "bafyreibubaw3c2zdtxud7xba32x4hpiapiip3gqyrdmsonlzvbqz66ii3y"
     },
     "games.gamesgamesgamesgames.org.getProfile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.org.getProfile",
-      "cid": "bafyreiawvbv7x5bvxkqbi6btvqyrdoszjtt3zf5cwrubinpjh6pmr5irsa"
+      "cid": "bafyreihh36ro6n2vsmscib3d7ix4g4tcwjvfo6pzd5o2wzgeloth6zur5m"
     },
     "games.gamesgamesgamesgames.org.profile": {
       "uri": "at://did:plc:il7eua5zbt4s2ly2jskjfz2t/com.atproto.lexicon.schema/games.gamesgamesgamesgames.org.profile",
-      "cid": "bafyreie7p7dcgxxxrw63tvvih52jhl2mt2m75t2kq63kcbvunwzmomhgay"
+      "cid": "bafyreiekmcone272utrlstulhytxtilbmszuw4kimopcnu5pp225wns7ku"
     }
   }
 }
