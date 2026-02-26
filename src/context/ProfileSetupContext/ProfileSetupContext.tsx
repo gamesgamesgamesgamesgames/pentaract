@@ -7,6 +7,7 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 	type PropsWithChildren,
 } from 'react'
@@ -17,6 +18,7 @@ import * as API from '@/helpers/API'
 import { type ProfileType } from '@/typedefs/GlobalState'
 import { type ProfileSourceData } from '@/typedefs/ProfileSourceData'
 import { fetchPrefillData } from '@/helpers/fetchPrefillData'
+import { generateSlug } from '@/helpers/generateSlug'
 import { type StepperStep } from '@/typedefs/StepperStep'
 import { type l } from '@atproto/lex'
 import { type State } from '@/typedefs/State'
@@ -37,6 +39,7 @@ export const ProfileSetupContext = createContext<{
 	displayName: string
 	description: string
 	pronouns: string
+	slug: string
 	websites: Website[]
 	avatarURL: string
 	country: string
@@ -60,6 +63,7 @@ export const ProfileSetupContext = createContext<{
 	setDisplayName: (value: string) => void
 	setDescription: (value: string) => void
 	setPronouns: (value: string) => void
+	setSlug: (value: string) => void
 	setWebsites: (value: Website[]) => void
 	setCountry: (value: string) => void
 	setFoundedAt: (value: string) => void
@@ -70,6 +74,7 @@ export const ProfileSetupContext = createContext<{
 	displayName: '',
 	description: '',
 	pronouns: '',
+	slug: '',
 	websites: [],
 	avatarURL: '',
 	country: '',
@@ -90,6 +95,7 @@ export const ProfileSetupContext = createContext<{
 	setDisplayName: () => {},
 	setDescription: () => {},
 	setPronouns: () => {},
+	setSlug: () => {},
 	setWebsites: () => {},
 	setCountry: () => {},
 	setFoundedAt: () => {},
@@ -106,12 +112,29 @@ export function ProfileSetupContextProvider(props: Props) {
 	const [displayName, setDisplayName] = useState('')
 	const [description, setDescription] = useState('')
 	const [pronouns, setPronouns] = useState('')
+	const [slug, setSlug] = useState('')
 	const [websites, setWebsites] = useState<Website[]>([])
 	const [avatarURL, setAvatarURL] = useState('')
 	const [country, setCountry] = useState('')
 	const [foundedAt, setFoundedAt] = useState('')
 	const [state, setState] = useState<State>('idle')
 	const [prefillData, setPrefillData] = useState<ProfileSourceData | null>(null)
+
+	// Track whether the user has manually edited the slug
+	const slugTouchedRef = useRef(false)
+
+	// Auto-generate slug from displayName unless manually edited
+	useEffect(() => {
+		if (!slugTouchedRef.current) {
+			setSlug(generateSlug(displayName))
+		}
+	}, [displayName])
+
+	// Wrap setSlug to track manual edits
+	const handleSetSlug = useCallback((value: string) => {
+		slugTouchedRef.current = true
+		setSlug(value)
+	}, [])
 
 	// Steps depend on account type
 	const steps = useMemo<StepperStep[]>(() => {
@@ -174,6 +197,7 @@ export function ProfileSetupContextProvider(props: Props) {
 					displayName: displayName || undefined,
 					description: description || undefined,
 					pronouns: pronouns || undefined,
+					slug: slug || undefined,
 					websites: websites.length ? websites : undefined,
 					createdAt: new Date().toISOString(),
 				})
@@ -183,6 +207,7 @@ export function ProfileSetupContextProvider(props: Props) {
 					description: description || undefined,
 					country: country || undefined,
 					status: 'active',
+					slug: slug || undefined,
 					foundedAt: foundedAt
 						? (new Date(foundedAt).toISOString() as l.DatetimeString)
 						: undefined,
@@ -206,6 +231,7 @@ export function ProfileSetupContextProvider(props: Props) {
 		foundedAt,
 		pronouns,
 		router,
+		slug,
 		state,
 		websites,
 	])
@@ -216,6 +242,7 @@ export function ProfileSetupContextProvider(props: Props) {
 			displayName,
 			description,
 			pronouns,
+			slug,
 			websites,
 			avatarURL,
 			country,
@@ -236,6 +263,7 @@ export function ProfileSetupContextProvider(props: Props) {
 			setDisplayName,
 			setDescription,
 			setPronouns,
+			setSlug: handleSetSlug,
 			setWebsites,
 			setCountry,
 			setFoundedAt,
@@ -251,10 +279,12 @@ export function ProfileSetupContextProvider(props: Props) {
 			displayName,
 			foundedAt,
 			goToStepIndex,
+			handleSetSlug,
 			nextStep,
 			prefillData,
 			previousStep,
 			pronouns,
+			slug,
 			state,
 			steps,
 			submitProfile,

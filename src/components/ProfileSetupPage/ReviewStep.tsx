@@ -20,6 +20,7 @@ export function ReviewStep() {
 		displayName,
 		foundedAt,
 		pronouns,
+		slug,
 	} = useProfileSetupContext()
 
 	const { countries } = useCountries()
@@ -50,6 +51,15 @@ export function ReviewStep() {
 						{displayName || (
 							<span className={'italic text-muted-foreground'}>
 								{'No display name provided'}
+							</span>
+						)}
+					</DataListValue>
+
+					<DataListLabel>{'Slug'}</DataListLabel>
+					<DataListValue>
+						{slug || (
+							<span className={'italic text-muted-foreground'}>
+								{'No slug provided'}
 							</span>
 						)}
 					</DataListValue>

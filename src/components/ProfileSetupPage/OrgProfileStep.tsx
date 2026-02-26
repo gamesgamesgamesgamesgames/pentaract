@@ -21,6 +21,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { type Country, useCountries } from '@/hooks/use-countries'
 import { useProfileSetupContext } from '@/context/ProfileSetupContext/ProfileSetupContext'
 import { Item, ItemContent, ItemDescription, ItemTitle } from '../ui/item'
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+	InputGroupText,
+} from '../ui/input-group'
 
 export function OrgProfileStep() {
 	const {
@@ -29,10 +35,12 @@ export function OrgProfileStep() {
 		description,
 		displayName,
 		foundedAt,
+		slug,
 		setCountry,
 		setDescription,
 		setDisplayName,
 		setFoundedAt,
+		setSlug,
 	} = useProfileSetupContext()
 
 	const { countries, isLoading } = useCountries()
@@ -44,6 +52,11 @@ export function OrgProfileStep() {
 	const handleDescriptionChange = useCallback<
 		ChangeEventHandler<HTMLTextAreaElement>
 	>((event) => setDescription(event.target.value), [setDescription])
+
+	const handleSlugChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+		(event) => setSlug(event.target.value),
+		[setSlug],
+	)
 
 	const handleFoundedAtChange = useCallback<
 		ChangeEventHandler<HTMLInputElement>
@@ -145,6 +158,22 @@ export function OrgProfileStep() {
 								value={foundedAt}
 							/>
 						</div>
+
+						<InputGroup>
+							<InputGroupAddon>
+								<InputGroupText>
+									{`${process.env.NEXT_PUBLIC_URL}/org/`}
+								</InputGroupText>
+							</InputGroupAddon>
+
+							<InputGroupInput
+								className='h-auto !pl-0.5'
+								id={'slug'}
+								onChange={handleSlugChange}
+								placeholder={'your-url-friendly-name'}
+								value={slug}
+							/>
+						</InputGroup>
 					</CardContent>
 				</Card>
 			</div>

@@ -19,6 +19,12 @@ import { Label } from '@/components/ui/label'
 import { Scroller } from '@/components/ui/scroller'
 import { Textarea } from '@/components/ui/textarea'
 import { useProfileSetupContext } from '@/context/ProfileSetupContext/ProfileSetupContext'
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+	InputGroupText,
+} from '../ui/input-group'
 
 type PronounOption = {
 	label: string
@@ -43,9 +49,11 @@ export function ActorProfileStep() {
 		description,
 		displayName,
 		pronouns,
+		slug,
 		setDescription,
 		setDisplayName,
 		setPronouns,
+		setSlug,
 	} = useProfileSetupContext()
 
 	const handleDisplayNameChange = useCallback<
@@ -55,6 +63,11 @@ export function ActorProfileStep() {
 	const handleDescriptionChange = useCallback<
 		ChangeEventHandler<HTMLTextAreaElement>
 	>((event) => setDescription(event.target.value), [setDescription])
+
+	const handleSlugChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+		(event) => setSlug(event.target.value),
+		[setSlug],
+	)
 
 	return (
 		<Scroller className={'h-full'}>
@@ -106,7 +119,9 @@ export function ActorProfileStep() {
 								items={PRONOUN_OPTIONS}
 								itemToStringLabel={(item) => item.label}
 								onValueChange={(value) => setPronouns(value?.value ?? '')}
-								value={PRONOUN_OPTIONS.find((p) => p.value === pronouns) ?? null}>
+								value={
+									PRONOUN_OPTIONS.find((p) => p.value === pronouns) ?? null
+								}>
 								<ComboboxInput placeholder={'Select or type your pronouns'} />
 
 								<ComboboxContent>
@@ -123,6 +138,28 @@ export function ActorProfileStep() {
 									</ComboboxList>
 								</ComboboxContent>
 							</Combobox>
+						</div>
+
+						<div className={'flex flex-col gap-2'}>
+							<Label htmlFor={'slug'}>{'Your Pentaract URL'}</Label>
+							<InputGroup>
+								<InputGroupAddon>
+									<InputGroupText>
+										{`${process.env.NEXT_PUBLIC_URL}/profile/`}
+									</InputGroupText>
+								</InputGroupAddon>
+
+								<InputGroupInput
+									className='h-auto !pl-0.5'
+									id={'slug'}
+									onChange={handleSlugChange}
+									placeholder={'your-url-friendly-name'}
+									value={slug}
+								/>
+							</InputGroup>
+							<p className={'text-xs text-muted-foreground'}>
+								{'The personalized URL for your profile on Pentaract.'}
+							</p>
 						</div>
 					</CardContent>
 				</Card>
