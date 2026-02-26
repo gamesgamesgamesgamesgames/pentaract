@@ -13,13 +13,21 @@ import {
 } from '@/components/ui/empty'
 import { Spinner } from '@/components/ui/spinner'
 import { login } from '@/store/actions/login'
+import { store } from '@/store/store'
 
 export function CallbackPage() {
 	const router = useRouter()
 
 	useEffect(() => {
 		if (window.location.search.includes('code=')) {
-			login().then(() => router.replace('/dashboard'))
+			login().then(() => {
+				const { profileType } = store.state
+				if (profileType) {
+					router.replace('/dashboard')
+				} else {
+					router.replace('/profile-setup')
+				}
+			})
 		}
 	}, [router])
 

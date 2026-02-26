@@ -1,5 +1,5 @@
 // Local imports
-import { queryAPI } from '@/helpers/API'
+import * as API from '@/helpers/API'
 import { store } from '@/store/store'
 
 export async function getUserProfile() {
@@ -9,27 +9,20 @@ export async function getUserProfile() {
 		throw new Error('Cannot get user profile before logging in.')
 	}
 
-	const response = await queryAPI('/xrpc/app.bsky.actor.getProfile')
-
-	if (!response.ok) {
-		console.warn(`[pentaract] getUserProfile failed: ${response.status}`)
-		store.set(() => ({
-			user: {
-				did: authTokens.sub,
-			},
-		}))
-		return
-	}
-
-	const profile = await response.json()
+	// Fetch Pentaract profile and Bluesky profile in parallel
+	const [{ profile, profileType }, blueskyProfile] = await Promise.all([
+		API.getProfile(),
+		API.getBlueskyProfile(),
+	])
 
 	store.set(() => ({
+		profileType: profileType as 'actor' | 'org' | null,
 		user: {
-			did: profile.did,
-			handle: profile.handle,
-			displayName: profile.displayName,
-			description: profile.description,
-			avatarURL: profile.avatarURL,
+			did: authTokens.sub,
+			handle: blueskyProfile?.handle,
+			displayName: profile?.displayName ?? blueskyProfile?.displayName,
+			description: profile?.description ?? blueskyProfile?.description,
+			avatarURL: blueskyProfile?.avatarURL,
 		},
 	}))
 }

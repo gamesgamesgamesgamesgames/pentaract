@@ -149,6 +149,7 @@ export function isAuthenticated(): boolean {
 }
 
 export function getStoredTokens(): OAuthTokens | null {
+	if (typeof localStorage === 'undefined') return null
 	const raw = localStorage.getItem(STORAGE_KEY)
 	if (!raw) return null
 	try {

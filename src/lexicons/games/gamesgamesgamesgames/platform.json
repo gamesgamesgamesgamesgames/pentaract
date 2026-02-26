@@ -1,0 +1,28 @@
+{
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"id": "games.gamesgamesgamesgames.platform",
+	"defs": {
+		"main": {
+			"description": "A platform for playing video games.",
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"properties": {
+					"description": { "type": "string" },
+					"name": { "type": "string" },
+					"createdAt": { "type": "string", "format": "datetime" },
+					"versions": {
+						"type": "array",
+						"items": { "type": "string" }
+					},
+					"websites": {
+						"type": "array",
+						"items": { "type": "string" }
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,13 +1,6 @@
-// Module imports
-import { type Cid } from '@atproto/lex'
+// Local imports
+import * as API from '@/helpers/API'
 
-type UploadResult = {
-	ref: Cid
-	mimeType: string
-	size: number
-}
-
-export async function uploadBlob(_file: File): Promise<UploadResult> {
-	console.warn('[pentaract] uploadBlob is stubbed — HappyView data API not yet available')
-	throw new Error('uploadBlob is not available yet')
+export function uploadBlob(file: File) {
+	return API.uploadBlob(file)
 }

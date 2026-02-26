@@ -1,0 +1,44 @@
+{
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"id": "games.gamesgamesgamesgames.putGame",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Update an existing game record in the authenticated user's repository.",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["uri", "name"],
+					"properties": {
+						"uri": { "type": "string", "format": "at-uri" },
+						"name": { "type": "string" },
+						"summary": { "type": "string" },
+						"applicationType": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#applicationType" },
+						"genres": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#genre" } },
+						"modes": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#mode" } },
+						"themes": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#theme" } },
+						"playerPerspectives": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#playerPerspective" } },
+						"releases": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#release" } },
+						"media": { "type": "array", "items": { "type": "ref", "ref": "games.gamesgamesgamesgames.defs#mediaItem" } },
+						"parent": { "type": "string", "format": "at-uri" },
+						"createdAt": { "type": "string", "format": "datetime" },
+						"shouldPublish": { "type": "boolean" }
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["uri", "cid"],
+					"properties": {
+						"uri": { "type": "string", "format": "at-uri" },
+						"cid": { "type": "string" }
+					}
+				}
+			}
+		}
+	}
+}

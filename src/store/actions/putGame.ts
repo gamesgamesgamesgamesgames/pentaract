@@ -2,16 +2,16 @@
 import { type AtUriString } from '@atproto/lex'
 
 // Local imports
+import * as API from '@/helpers/API'
 import { type UnpublishedGame } from '@/typedefs/UnpublishedGame'
 
 // Types
 type Options = { shouldPublish?: boolean }
 
-export async function putGame(
-	_uri: AtUriString,
-	_gameDetails: UnpublishedGame,
-	_options: Options = {},
+export function putGame(
+	uri: AtUriString,
+	gameDetails: UnpublishedGame,
+	options: Options = {},
 ): Promise<AtUriString> {
-	console.warn('[pentaract] putGame is stubbed — HappyView data API not yet available')
-	throw new Error('putGame is not available yet')
+	return API.putGame(uri, gameDetails, options)
 }

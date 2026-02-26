@@ -8,4 +8,9 @@ import { initialize } from '@/store/initialize'
 
 export const store = makeStore<GlobalState>(INITIAL_STATE)
 
+if (typeof window !== 'undefined') {
+	// @ts-ignore
+	window.store = store
+}
+
 initialize()

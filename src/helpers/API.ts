@@ -1,34 +1,261 @@
+// Module imports
+import { type AtUriString } from '@atproto/lex'
+
 // Local imports
 import { type DID } from '@/typedefs/DID'
 import { type GameRecord } from '@/typedefs/GameRecord'
+import { type InputBody as ActorProfileInput } from '@/helpers/lexicons/games/gamesgamesgamesgames/actor/createProfile.defs'
+import { type InputBody as OrgProfileInput } from '@/helpers/lexicons/games/gamesgamesgamesgames/org/createProfile.defs'
+import { type MediaItem } from '@/typedefs/MediaItem'
+import { type PentaractAPICreateGameOptions } from '@/typedefs/PentaractAPICreateGameOptions'
+import { type PentaractAPICreateProfileResult } from '@/typedefs/PentaractAPICreateProfileResult'
+import { type PentaractAPIGetBlueskyProfileResult } from '@/typedefs/PentaractAPIGetBlueskyProfileResult'
+import { type PentaractAPIGetProfileResult } from '@/typedefs/PentaractAPIGetProfileResult'
+import { type PentaractAPIPutGameOptions } from '@/typedefs/PentaractAPIPutGameOptions'
+import { type PentaractAPIQueryOptions } from '@/typedefs/PentaractAPIQueryOptions'
+import { type PentaractAPIUploadBlobResult } from '@/typedefs/PentaractAPIUploadBlobResult'
+import { type UnpublishedGame } from '@/typedefs/UnpublishedGame'
 import { getAccessToken } from '@/helpers/oauth'
 
 // Constants
 const API_URL = process.env.NEXT_PUBLIC_HAPPYVIEW_URL!
 
-export async function queryAPI(path: string, options: RequestInit = {}) {
-	const token = getAccessToken()
+// ---------------------------------------------------------------------------
+// Core
+// ---------------------------------------------------------------------------
+
+async function queryAPI(path: string, options: PentaractAPIQueryOptions = {}) {
+	const { isAuthenticated = false, ...fetchOptions } = options
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json',
-		...(options.headers as Record<string, string>),
+		...(fetchOptions.headers as Record<string, string>),
 	}
 
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`
+	if (isAuthenticated) {
+		const token = getAccessToken()
+		if (token) {
+			headers['Authorization'] = `Bearer ${token}`
+		}
 	}
 
 	return fetch(`${API_URL}${path}`, {
-		...options,
+		...fetchOptions,
 		headers,
 	})
 }
 
-export async function getGame(_uri: string): Promise<GameRecord | undefined> {
-	console.warn('[pentaract] API.getGame is stubbed — HappyView data API not yet available')
-	return undefined
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function serializeGameBody(gameDetails: UnpublishedGame) {
+	const body: Record<string, unknown> = {}
+
+	if (gameDetails.summary) body.summary = gameDetails.summary
+	if (gameDetails.applicationType) body.applicationType = gameDetails.applicationType
+	if (gameDetails.genres?.length) body.genres = gameDetails.genres
+	if (gameDetails.modes?.length) body.modes = gameDetails.modes
+	if (gameDetails.themes?.length) body.themes = gameDetails.themes
+	if (gameDetails.playerPerspectives?.length) body.playerPerspectives = gameDetails.playerPerspectives
+	if (gameDetails.parent) body.parent = gameDetails.parent
+
+	if (gameDetails.releases?.length) {
+		body.releases = gameDetails.releases
+	}
+
+	if (gameDetails.media?.length) {
+		body.media = serializeMedia(gameDetails.media)
+	}
+
+	return body
+}
+
+function serializeMedia(media: MediaItem[]) {
+	return media
+		.filter((item) => item.blob !== null)
+		.map((item) => ({
+			blob: {
+				$type: 'blob',
+				ref: { $link: item.blob!.ref },
+				mimeType: item.blob!.mimeType,
+				size: item.blob!.size,
+			},
+			title: item.title,
+			description: item.description,
+			...(item.width !== null ? { width: item.width } : {}),
+			...(item.height !== null ? { height: item.height } : {}),
+			...(item.locale !== null ? { locale: item.locale } : {}),
+			...(item.mediaType !== null ? { mediaType: item.mediaType } : {}),
+		}))
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
+export async function createGame(
+	gameDetails: UnpublishedGame,
+	options: PentaractAPICreateGameOptions = {},
+): Promise<AtUriString> {
+	const body = {
+		...serializeGameBody(gameDetails),
+		name: gameDetails.name,
+		shouldPublish: options.shouldPublish ?? false,
+	}
+
+	const response = await queryAPI('/xrpc/games.gamesgamesgamesgames.createGame', {
+		isAuthenticated: true,
+		method: 'POST',
+		body: JSON.stringify(body),
+	})
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`createGame failed (${response.status}): ${errorBody}`)
+	}
+
+	const data = await response.json()
+	return data.uri as AtUriString
+}
+
+export async function listGames(
+	limit = 20,
+	cursor?: string,
+): Promise<{ cursor?: string; games: GameRecord[] }> {
+	const params = new URLSearchParams({ limit: String(limit) })
+	if (cursor) {
+		params.set('cursor', cursor)
+	}
+
+	const response = await queryAPI(
+		`/xrpc/games.gamesgamesgamesgames.listGames?${params}`,
+		{ isAuthenticated: true },
+	)
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`listGames failed (${response.status}): ${errorBody}`)
+	}
+
+	return response.json()
+}
+
+export async function getGame(uri: string): Promise<GameRecord | undefined> {
+	const resp = await queryAPI(
+		`/xrpc/games.gamesgamesgamesgames.getGame?uri=${encodeURIComponent(uri)}`,
+	)
+
+	if (!resp.ok) {
+		return undefined
+	}
+
+	const data = await resp.json()
+	return data.game as GameRecord
+}
+
+export async function getProfile(): Promise<PentaractAPIGetProfileResult> {
+	const response = await queryAPI('/xrpc/games.gamesgamesgamesgames.getProfile', { isAuthenticated: true })
+
+	if (!response.ok) {
+		return { profile: null, profileType: null }
+	}
+
+	return response.json()
+}
+
+export async function getBlueskyProfile(): Promise<PentaractAPIGetBlueskyProfileResult | null> {
+	const response = await queryAPI('/xrpc/app.bsky.actor.getProfile', { isAuthenticated: true })
+
+	if (!response.ok) {
+		return null
+	}
+
+	return response.json()
+}
+
+export async function createActorProfile(profile: ActorProfileInput): Promise<PentaractAPICreateProfileResult> {
+	const response = await queryAPI('/xrpc/games.gamesgamesgamesgames.actor.createProfile', {
+		isAuthenticated: true,
+		method: 'POST',
+		body: JSON.stringify(profile),
+	})
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`createActorProfile failed (${response.status}): ${errorBody}`)
+	}
+
+	return response.json()
+}
+
+export async function createOrgProfile(profile: OrgProfileInput): Promise<PentaractAPICreateProfileResult> {
+	const response = await queryAPI('/xrpc/games.gamesgamesgamesgames.org.createProfile', {
+		isAuthenticated: true,
+		method: 'POST',
+		body: JSON.stringify(profile),
+	})
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`createOrgProfile failed (${response.status}): ${errorBody}`)
+	}
+
+	return response.json()
+}
+
+export async function putGame(
+	uri: AtUriString,
+	gameDetails: UnpublishedGame,
+	options: PentaractAPIPutGameOptions = {},
+): Promise<AtUriString> {
+	const body = {
+		...serializeGameBody(gameDetails),
+		uri,
+		name: gameDetails.name,
+		createdAt: gameDetails.createdAt,
+		shouldPublish: options.shouldPublish ?? false,
+	}
+
+	const response = await queryAPI('/xrpc/games.gamesgamesgamesgames.putGame', {
+		isAuthenticated: true,
+		method: 'POST',
+		body: JSON.stringify(body),
+	})
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`putGame failed (${response.status}): ${errorBody}`)
+	}
+
+	const data = await response.json()
+	return data.uri as AtUriString
 }
 
 export async function resolveHandle(_handle: string): Promise<DID | null> {
 	console.warn('[pentaract] API.resolveHandle is stubbed — HappyView data API not yet available')
 	return null
+}
+
+export async function uploadBlob(file: File): Promise<PentaractAPIUploadBlobResult> {
+	const response = await queryAPI('/xrpc/com.atproto.repo.uploadBlob', {
+		isAuthenticated: true,
+		method: 'POST',
+		headers: {
+			'Content-Type': file.type,
+		},
+		body: file,
+	})
+
+	if (!response.ok) {
+		const errorBody = await response.text()
+		throw new Error(`uploadBlob failed (${response.status}): ${errorBody}`)
+	}
+
+	const data = await response.json()
+
+	return {
+		ref: data.blob.ref.$link,
+		mimeType: data.blob.mimeType,
+		size: data.blob.size,
+	}
 }
