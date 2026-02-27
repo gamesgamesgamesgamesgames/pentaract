@@ -13,6 +13,7 @@ import { type PentaractAPIGetBlueskyProfileResult } from '@/typedefs/PentaractAP
 import { type PentaractAPIGetProfileResult } from '@/typedefs/PentaractAPIGetProfileResult'
 import { type PentaractAPIPutGameOptions } from '@/typedefs/PentaractAPIPutGameOptions'
 import { type PentaractAPIQueryOptions } from '@/typedefs/PentaractAPIQueryOptions'
+import { type PentaractAPISearchProfilesTypeaheadResult } from '@/typedefs/PentaractAPISearchProfilesTypeaheadResult'
 import { type PentaractAPIUploadBlobResult } from '@/typedefs/PentaractAPIUploadBlobResult'
 import { type UnpublishedGame } from '@/typedefs/UnpublishedGame'
 import { getAccessToken } from '@/helpers/oauth'
@@ -168,6 +169,22 @@ export async function getBlueskyProfile(): Promise<PentaractAPIGetBlueskyProfile
 
 	if (!response.ok) {
 		return null
+	}
+
+	return response.json()
+}
+
+export async function searchProfilesTypeahead(
+	q: string,
+	limit = 10,
+): Promise<PentaractAPISearchProfilesTypeaheadResult> {
+	const params = new URLSearchParams({ q, limit: String(limit) })
+	const response = await queryAPI(
+		`/xrpc/games.gamesgamesgamesgames.searchProfilesTypeahead?${params}`,
+	)
+
+	if (!response.ok) {
+		return { profiles: [] }
 	}
 
 	return response.json()

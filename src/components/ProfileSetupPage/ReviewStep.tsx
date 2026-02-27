@@ -7,6 +7,7 @@ import {
 	DataListLabel,
 	DataListValue,
 } from '@/components/DataList/DataList'
+import { RichTextRenderer } from '@/components/ui/rich-text-renderer'
 import { Scroller } from '@/components/ui/scroller'
 import { useCountries } from '@/hooks/use-countries'
 import { useProfileSetupContext } from '@/context/ProfileSetupContext/ProfileSetupContext'
@@ -17,6 +18,7 @@ export function ReviewStep() {
 		avatarURL,
 		country,
 		description,
+		descriptionFacets,
 		displayName,
 		foundedAt,
 		pronouns,
@@ -66,7 +68,12 @@ export function ReviewStep() {
 
 					<DataListLabel>{'Description'}</DataListLabel>
 					<DataListValue>
-						{description || (
+						{description ? (
+							<RichTextRenderer
+								text={description}
+								facets={descriptionFacets}
+							/>
+						) : (
 							<span className={'italic text-muted-foreground'}>
 								{'No description provided'}
 							</span>

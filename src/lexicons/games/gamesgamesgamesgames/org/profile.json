@@ -60,6 +60,14 @@
             "maxLength": 3000,
             "description": "Free-form profile description text."
           },
+          "descriptionFacets": {
+            "type": "array",
+            "description": "Annotations of text (mentions, URLs, hashtags, etc)",
+            "items": {
+              "ref": "app.bsky.richtext.facet",
+              "type": "ref"
+            }
+          },
           "displayName": {
             "type": "string",
             "maxLength": 640

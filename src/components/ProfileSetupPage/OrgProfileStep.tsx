@@ -16,9 +16,10 @@ import {
 } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RichTextComposer } from '@/components/ui/rich-text-composer'
 import { Scroller } from '@/components/ui/scroller'
-import { Textarea } from '@/components/ui/textarea'
 import { type Country, useCountries } from '@/hooks/use-countries'
+import { type Main as Facet } from '@/helpers/lexicons/app/bsky/richtext/facet.defs'
 import { useProfileSetupContext } from '@/context/ProfileSetupContext/ProfileSetupContext'
 import { Item, ItemContent, ItemDescription, ItemTitle } from '../ui/item'
 import {
@@ -38,6 +39,7 @@ export function OrgProfileStep() {
 		slug,
 		setCountry,
 		setDescription,
+		setDescriptionFacets,
 		setDisplayName,
 		setFoundedAt,
 		setSlug,
@@ -49,9 +51,13 @@ export function OrgProfileStep() {
 		ChangeEventHandler<HTMLInputElement>
 	>((event) => setDisplayName(event.target.value), [setDisplayName])
 
-	const handleDescriptionChange = useCallback<
-		ChangeEventHandler<HTMLTextAreaElement>
-	>((event) => setDescription(event.target.value), [setDescription])
+	const handleDescriptionChange = useCallback(
+		(text: string, facets: Facet[]) => {
+			setDescription(text)
+			setDescriptionFacets(facets)
+		},
+		[setDescription, setDescriptionFacets],
+	)
 
 	const handleSlugChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
 		(event) => setSlug(event.target.value),
@@ -96,12 +102,11 @@ export function OrgProfileStep() {
 						</div>
 
 						<div className={'flex flex-col gap-2'}>
-							<Label htmlFor={'description'}>{'Description'}</Label>
-							<Textarea
-								id={'description'}
+							<Label>{'Description'}</Label>
+							<RichTextComposer
+								className={'min-h-[100px]'}
 								onChange={handleDescriptionChange}
 								placeholder={'Describe your organization'}
-								rows={4}
 								value={description}
 							/>
 						</div>

@@ -16,8 +16,9 @@ import {
 } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RichTextComposer } from '@/components/ui/rich-text-composer'
 import { Scroller } from '@/components/ui/scroller'
-import { Textarea } from '@/components/ui/textarea'
+import { type Main as Facet } from '@/helpers/lexicons/app/bsky/richtext/facet.defs'
 import { useProfileSetupContext } from '@/context/ProfileSetupContext/ProfileSetupContext'
 import {
 	InputGroup,
@@ -51,6 +52,7 @@ export function ActorProfileStep() {
 		pronouns,
 		slug,
 		setDescription,
+		setDescriptionFacets,
 		setDisplayName,
 		setPronouns,
 		setSlug,
@@ -60,9 +62,13 @@ export function ActorProfileStep() {
 		ChangeEventHandler<HTMLInputElement>
 	>((event) => setDisplayName(event.target.value), [setDisplayName])
 
-	const handleDescriptionChange = useCallback<
-		ChangeEventHandler<HTMLTextAreaElement>
-	>((event) => setDescription(event.target.value), [setDescription])
+	const handleDescriptionChange = useCallback(
+		(text: string, facets: Facet[]) => {
+			setDescription(text)
+			setDescriptionFacets(facets)
+		},
+		[setDescription, setDescriptionFacets],
+	)
 
 	const handleSlugChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
 		(event) => setSlug(event.target.value),
@@ -103,12 +109,11 @@ export function ActorProfileStep() {
 						</div>
 
 						<div className={'flex flex-col gap-2'}>
-							<Label htmlFor={'description'}>{'Bio'}</Label>
-							<Textarea
-								id={'description'}
+							<Label>{'Bio'}</Label>
+							<RichTextComposer
+								className={'min-h-[100px]'}
 								onChange={handleDescriptionChange}
 								placeholder={'Tell us about yourself'}
-								rows={4}
 								value={description}
 							/>
 						</div>

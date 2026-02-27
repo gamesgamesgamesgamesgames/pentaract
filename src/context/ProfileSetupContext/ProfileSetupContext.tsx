@@ -21,6 +21,7 @@ import { fetchPrefillData } from '@/helpers/fetchPrefillData'
 import { generateSlug } from '@/helpers/generateSlug'
 import { type StepperStep } from '@/typedefs/StepperStep'
 import { type l } from '@atproto/lex'
+import { type Main as Facet } from '@/helpers/lexicons/app/bsky/richtext/facet.defs'
 import { type State } from '@/typedefs/State'
 import { type Website } from '@/helpers/lexicons/games/gamesgamesgamesgames/defs.defs'
 import { setProfileTypeCookie } from '@/helpers/setProfileTypeCookie'
@@ -38,6 +39,7 @@ export const ProfileSetupContext = createContext<{
 	accountType: ProfileType | null
 	displayName: string
 	description: string
+	descriptionFacets: Facet[]
 	pronouns: string
 	slug: string
 	websites: Website[]
@@ -62,6 +64,7 @@ export const ProfileSetupContext = createContext<{
 	setAccountType: (type: ProfileType) => void
 	setDisplayName: (value: string) => void
 	setDescription: (value: string) => void
+	setDescriptionFacets: (value: Facet[]) => void
 	setPronouns: (value: string) => void
 	setSlug: (value: string) => void
 	setWebsites: (value: Website[]) => void
@@ -73,6 +76,7 @@ export const ProfileSetupContext = createContext<{
 	accountType: null,
 	displayName: '',
 	description: '',
+	descriptionFacets: [],
 	pronouns: '',
 	slug: '',
 	websites: [],
@@ -94,6 +98,7 @@ export const ProfileSetupContext = createContext<{
 	setAccountType: () => {},
 	setDisplayName: () => {},
 	setDescription: () => {},
+	setDescriptionFacets: () => {},
 	setPronouns: () => {},
 	setSlug: () => {},
 	setWebsites: () => {},
@@ -111,6 +116,7 @@ export function ProfileSetupContextProvider(props: Props) {
 	const [accountType, setAccountType] = useState<ProfileType | null>(null)
 	const [displayName, setDisplayName] = useState('')
 	const [description, setDescription] = useState('')
+	const [descriptionFacets, setDescriptionFacets] = useState<Facet[]>([])
 	const [pronouns, setPronouns] = useState('')
 	const [slug, setSlug] = useState('')
 	const [websites, setWebsites] = useState<Website[]>([])
@@ -196,6 +202,7 @@ export function ProfileSetupContextProvider(props: Props) {
 				await API.createActorProfile({
 					displayName: displayName || undefined,
 					description: description || undefined,
+					descriptionFacets: descriptionFacets.length ? descriptionFacets : undefined,
 					pronouns: pronouns || undefined,
 					slug: slug || undefined,
 					websites: websites.length ? websites : undefined,
@@ -205,6 +212,7 @@ export function ProfileSetupContextProvider(props: Props) {
 				await API.createOrgProfile({
 					displayName: displayName || undefined,
 					description: description || undefined,
+					descriptionFacets: descriptionFacets.length ? descriptionFacets : undefined,
 					country: country || undefined,
 					status: 'active',
 					slug: slug || undefined,
@@ -227,6 +235,7 @@ export function ProfileSetupContextProvider(props: Props) {
 		accountType,
 		country,
 		description,
+		descriptionFacets,
 		displayName,
 		foundedAt,
 		pronouns,
@@ -241,6 +250,7 @@ export function ProfileSetupContextProvider(props: Props) {
 			accountType,
 			displayName,
 			description,
+			descriptionFacets,
 			pronouns,
 			slug,
 			websites,
@@ -262,6 +272,7 @@ export function ProfileSetupContextProvider(props: Props) {
 			setAccountType,
 			setDisplayName,
 			setDescription,
+			setDescriptionFacets,
 			setPronouns,
 			setSlug: handleSetSlug,
 			setWebsites,
@@ -276,6 +287,7 @@ export function ProfileSetupContextProvider(props: Props) {
 			country,
 			currentStepIndex,
 			description,
+			descriptionFacets,
 			displayName,
 			foundedAt,
 			goToStepIndex,

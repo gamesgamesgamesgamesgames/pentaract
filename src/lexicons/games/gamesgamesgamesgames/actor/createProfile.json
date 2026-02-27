@@ -39,6 +39,14 @@
               "type": "string",
               "maxLength": 3000
             },
+            "descriptionFacets": {
+              "type": "array",
+              "description": "Annotations of text (mentions, URLs, hashtags, etc)",
+              "items": {
+                "ref": "app.bsky.richtext.facet",
+                "type": "ref"
+              }
+            },
             "displayName": {
               "type": "string",
               "maxLength": 640
